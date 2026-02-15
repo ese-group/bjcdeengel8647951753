@@ -479,9 +479,6 @@
         .confirm-btn {
 		    background: linear-gradient(135deg, #e74c3c, #c0392b);
 		    color: white;
-		    width: 100%;
-		    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-		    transition: all 0.3s ease;
 		    border: none;
 		    border-radius: 10px;
 		    padding: 12px 20px;
@@ -489,6 +486,12 @@
 		    font-weight: bold;
 		    letter-spacing: 0.5px;
 		    cursor: pointer;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+		    /* Breedte: ongeveer 6 cm (280px) */
+		    width: 280px;
+		    max-width: 90%;
+		    min-width: 200px;
 		}
 
         .confirm-btn:hover {
@@ -503,7 +506,6 @@
         }
 
 		.undo-btn {
-		    width: 100%;
 		    background: #3498db;
 		    color: white;
 		    border: none;
@@ -515,6 +517,10 @@
 		    cursor: pointer;
 		    transition: all 0.3s ease;
 		    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+		    /* Breedte: ongeveer 3 cm (180px) */
+		    width: 180px;
+		    max-width: 90%;    /* Op kleine schermen niet te breed */
+		    min-width: 120px;  /* Voorkomt dat knop te klein wordt */
 		}
 		
 		.undo-btn:hover {

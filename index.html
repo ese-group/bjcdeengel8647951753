@@ -3284,77 +3284,65 @@ window.showPage = function(pageNum) {
 			    
 			    const whitePlayer = state.selectedWhitePlayer;
 			    
-			    // Originele spelersnamen en targets (voordat we eventueel wisselen)
-			    const originalP1Name = state.currentMatch.p1;
-			    const originalP2Name = state.currentMatch.p2;
-			    const originalTarget1 = state.currentMatch.target1;
-			    const originalTarget2 = state.currentMatch.target2;
+			    // Originele spelers (voordat we eventueel wisselen)
+			    const origP1Name = state.currentMatch.p1;
+			    const origP2Name = state.currentMatch.p2;
+			    const origTarget1 = state.currentMatch.target1;
+			    const origTarget2 = state.currentMatch.target2;
 			    
-			    // Bewaar originele waarden voor later gebruik (bijv. bij download)
-			    state.currentMatch.originalP1 = originalP1Name;
-			    state.currentMatch.originalP2 = originalP2Name;
-			    state.currentMatch.originalTarget1 = originalTarget1;
-			    state.currentMatch.originalTarget2 = originalTarget2;
+			    // Bewaar originele waarden voor download
+			    state.currentMatch.originalP1 = origP1Name;
+			    state.currentMatch.originalP2 = origP2Name;
+			    state.currentMatch.originalTarget1 = origTarget1;
+			    state.currentMatch.originalTarget2 = origTarget2;
 			    
-			    // Zoek de vaste TSG van elke speler in de spelerslijst
-			    const player1Obj = state.players.find(p => p.name === originalP1Name);
-			    const player2Obj = state.players.find(p => p.name === originalP2Name);
-			    const tsg1 = (player1Obj && player1Obj.tsg) ? player1Obj.tsg : '−';
-			    const tsg2 = (player2Obj && player2Obj.tsg) ? player2Obj.tsg : '−';
+			    // Zoek TSG van beide originele spelers
+			    const player1Data = state.players.find(p => p.name === origP1Name);
+			    const player2Data = state.players.find(p => p.name === origP2Name);
+			    const tsgOrig1 = (player1Data && player1Data.tsg) ? player1Data.tsg : '−';
+			    const tsgOrig2 = (player2Data && player2Data.tsg) ? player2Data.tsg : '−';
 			    
-			    // RESET ALLE SPELER VARIABELEN (worden hieronder correct ingevuld)
-			    state.player1 = { 
-			        score: 0, 
-			        turns: [], 
-			        target: 0, 
-			        beurtNummer: 1, 
-			        highestSeries: 0, 
-			        isWhite: false,
-			        fixedTSG: '−'
-			    };
-			    state.player2 = { 
-			        score: 0, 
-			        turns: [], 
-			        target: 0, 
-			        beurtNummer: 1, 
-			        highestSeries: 0, 
-			        isWhite: false,
-			        fixedTSG: '−'
-			    };
+			    // Reset spelers
+			    state.player1 = { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false, fixedTSG: '−' };
+			    state.player2 = { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false, fixedTSG: '−' };
 			    state.firstToTarget = null;
 			    state.isNabeurt = false;
 			    state.currentInput = 0;
 			    state.matchEnded = false;
 			    
-			    // Bepaal wie wit speelt en wijs targets en TSG toe
+			    // Bepaal wie wit speelt en wijs namen, targets en TSG correct toe
 			    if (whitePlayer === 2) {
 			        // Speler 2 (origineel) speelt met wit → wissel namen en targets
-			        [state.currentMatch.p1, state.currentMatch.p2] = [originalP2Name, originalP1Name];
-			        [state.currentMatch.target1, state.currentMatch.target2] = [originalTarget2, originalTarget1];
+			        state.currentMatch.p1 = origP2Name;
+			        state.currentMatch.p2 = origP1Name;
+			        state.currentMatch.target1 = origTarget2;
+			        state.currentMatch.target2 = origTarget1;
 			        
+			        // Wit = speler 1 (in de UI) krijgt TSG van originele speler 2
 			        state.player1.isWhite = true;
 			        state.player1.target = state.currentMatch.target1;
-			        state.player1.fixedTSG = tsg2;  // TSG van originele speler 2
+			        state.player1.fixedTSG = tsgOrig2;
 			        
+			        // Geel = speler 2 krijgt TSG van originele speler 1
 			        state.player2.isWhite = false;
 			        state.player2.target = state.currentMatch.target2;
-			        state.player2.fixedTSG = tsg1;  // TSG van originele speler 1
+			        state.player2.fixedTSG = tsgOrig1;
 			        
 			        state.currentMatch.whitePlayer = 2;
 			    } else {
 			        // Speler 1 (origineel) speelt met wit → geen wisseling
-			        state.currentMatch.p1 = originalP1Name;
-			        state.currentMatch.p2 = originalP2Name;
-			        state.currentMatch.target1 = originalTarget1;
-			        state.currentMatch.target2 = originalTarget2;
+			        state.currentMatch.p1 = origP1Name;
+			        state.currentMatch.p2 = origP2Name;
+			        state.currentMatch.target1 = origTarget1;
+			        state.currentMatch.target2 = origTarget2;
 			        
 			        state.player1.isWhite = true;
 			        state.player1.target = state.currentMatch.target1;
-			        state.player1.fixedTSG = tsg1;  // TSG van originele speler 1
+			        state.player1.fixedTSG = tsgOrig1;
 			        
 			        state.player2.isWhite = false;
 			        state.player2.target = state.currentMatch.target2;
-			        state.player2.fixedTSG = tsg2;  // TSG van originele speler 2
+			        state.player2.fixedTSG = tsgOrig2;
 			        
 			        state.currentMatch.whitePlayer = 1;
 			    }
@@ -3364,34 +3352,28 @@ window.showPage = function(pageNum) {
 			    state.isFirstPlayerInRound = true;
 			    state.pendingEnd = false;
 			    
-			    // reset lastStateBeforeAdd
+			    // Reset undo state
 			    lastStateBeforeAdd = null;
 			    
-			    // VERWIJDER de match ended alert
-			    const matchEndedAlert = document.getElementById('matchEndedAlert');
-			    if (matchEndedAlert) {
-			        matchEndedAlert.style.display = 'none';
-			        matchEndedAlert.innerHTML = '';
-			    }
+			    // Verberg match ended alert
+			    document.getElementById('matchEndedAlert').style.display = 'none';
 			    
-			    document.getElementById('matchTitle').textContent = 
-			        `${state.currentMatch.p1} vs ${state.currentMatch.p2}`;
+			    // Update titel
+			    document.getElementById('matchTitle').textContent = `${state.currentMatch.p1} vs ${state.currentMatch.p2}`;
 			    
-			    // Zet de namen in de score displays
+			    // Zet namen in de score displays
 			    document.getElementById('player1ScoreName').textContent = state.currentMatch.p1;
 			    document.getElementById('player2ScoreName').textContent = state.currentMatch.p2;
 			    
-			    // UPDATE DE SIDE SCORE DISPLAYS
+			    // Update side displays
 			    updateSideScoreDisplays();
 			    
-			    // SCHAKEL DE KNOPPEN WEER IN
+			    // Schakel knoppen in
 			    enableScoreButtons();
 			    
-			    // Reset de current score display
+			    // Reset current score displays
 			    document.getElementById('player1CurrentScore').querySelector('.current-score-value').textContent = '0';
 			    document.getElementById('player2CurrentScore').querySelector('.current-score-value').textContent = '0';
-			    
-			    // Toon alleen de display van de huidige speler
 			    document.getElementById('player1CurrentScore').classList.remove('inactive');
 			    document.getElementById('player1CurrentScore').classList.add('active');
 			    document.getElementById('player2CurrentScore').classList.remove('active');

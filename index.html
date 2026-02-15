@@ -5140,25 +5140,40 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
                 
                 const totalSpeeldagen = state.speeldagen.length;
                 
-                container.innerHTML = `
-                    <div class="speeldagen-management-container">
-                        <!-- Import sectie -->
-                        <div style="background: #2c3e50; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-                            <h4>📅 Importeer Speeldagen</h4>
-                            <p style="color: #bdc3c7; font-size: 0.9em; margin: 5px 0;">
-                                Importeer speeldagen vanuit een CSV bestand met kolommen: VolgnummerSpeeldag;ExcelDatum
-                            </p>
-                            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-                                <button onclick="importSpeeldagenCSV()" 
-                                        style="background: #e67e22; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-                                    📂 Importeer CSV
-                                </button>
-                                <button onclick="exportSpeeldagenToCSV()" 
-                                        style="background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-                                    💾 Exporteer CSV
-                                </button>
-                            </div>
-                        </div>
+                <div class="speeldagen-management-container">
+				    <!-- Google Sheets sectie -->
+				    <div style="background: #2c3e50; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+				        <h4>📅 Google Sheets Speeldagen</h4>
+				        <p style="color: #bdc3c7; font-size: 0.9em; margin: 5px 0;">
+				            Speeldagen worden geladen uit het tabblad "Speeldagen" in je Google Sheet.
+				        </p>
+				        <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+				            <button onclick="refreshSpeeldagenFromGoogleSheet()"
+				                    style="background: #e67e22; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+				                🔄 Herlaad van Google Sheet
+				            </button>
+				            <!-- Optioneel: CSV-import als backup
+				            <button onclick="importSpeeldagenCSV()" 
+				                    style="background: #9b59b6; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+				                📂 Importeer CSV
+				            </button>
+				            -->
+				        </div>
+				    </div>
+				    
+				    <!-- Export functie (momenteel uitgeschakeld)
+				    <div style="background: #2c3e50; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+				        <h4>📤 Exporteer Speeldagen</h4>
+				        <p style="color: #bdc3c7; font-size: 0.9em; margin: 5px 0;">
+				            Exporteer huidige speeldagen naar CSV.
+				        </p>
+				        <button onclick="exportSpeeldagenToCSV()" 
+				                style="background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+				            💾 Exporteer CSV
+				        </button>
+				    </div>
+				    -->
+				</div>
                         
                         <!-- Formulier voor nieuwe speeldag -->
                         <div class="speeldagen-form-container">

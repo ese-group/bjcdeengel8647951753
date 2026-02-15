@@ -3633,11 +3633,29 @@ window.showPage = function(pageNum) {
                 }
                 
                 // Reset en update
-                state.currentInput = 0;
-                updateCurrentScoreDisplay();
-                document.querySelectorAll('.dynamic-needed').forEach(el => el.remove());
-                updateSideScoreDisplays(); // UPDATE SIDE SCORES
-                updateScoringPage();
+				state.currentInput = 0;
+				
+				// 👇 BACKUP VOOR ELKE SCORE-INGAVE (stil, geen wachttijd)
+				const backupData = {
+				  matchId: state.currentMatch.id,
+				  player1: state.currentMatch.p1,
+				  player2: state.currentMatch.p2,
+				  date: state.currentMatch.date,
+				  p1Score: state.player1.score,
+				  p2Score: state.player2.score,
+				  turnNumber: state.turnNumber,
+				  currentPlayer: state.currentPlayer,
+				  isNabeurt: state.isNabeurt,
+				  firstToTarget: state.firstToTarget,
+				  completed: state.matchEnded
+				};
+				backupMatchSilently(backupData);
+				// 👆 EINDE BACKUP
+				
+				updateCurrentScoreDisplay();
+				document.querySelectorAll('.dynamic-needed').forEach(el => el.remove());
+				updateSideScoreDisplays(); // UPDATE SIDE SCORES
+				updateScoringPage();
             }
 
             function endMatch() {

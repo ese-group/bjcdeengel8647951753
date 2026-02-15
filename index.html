@@ -5162,93 +5162,80 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 				      </div>
 				    </div>
 				    
-				    <!-- Export functie (momenteel uitgeschakeld)
-				    <div style="background: #2c3e50; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-				      <h4>📤 Exporteer Speeldagen</h4>
-				      <p style="color: #bdc3c7; font-size: 0.9em; margin: 5px 0;">
-				        Exporteer huidige speeldagen naar CSV.
-				      </p>
-				      <button onclick="exportSpeeldagenToCSV()" 
-				              style="background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
-				        💾 Exporteer CSV
-				      </button>
-				    </div>
-				    -->
-				    
 				    <!-- Formulier voor nieuwe speeldag -->
 				    <div class="speeldagen-form-container">
+				      <h3>➕ Nieuwe Speeldag Toevoegen</h3>
+				      <div class="form-row">
+				        <div class="form-group">
+				          <label>Volgnummer *</label>
+				          <input type="number" id="speeldagVolgnummer" class="form-input" 
+				                 placeholder="bijv. 1" min="1" max="100"
+				                 value="${state.speeldagen.length > 0 ? Math.max(...state.speeldagen.map(s => s.volgnummer)) + 1 : 1}">
+				        </div>
+				        <div class="form-group">
+				          <label>Datum *</label>
+				          <input type="date" id="speeldagDatum" class="form-input" 
+				                 value="${formatDateForInput(new Date())}">
+				        </div>
+				        <div class="form-group">
+				          <label>Excel Datum (optioneel)</label>
+				          <input type="number" id="speeldagExcelDatum" class="form-input" 
+				                 placeholder="Excel datumnummer">
+				        </div>
+				        <button class="add-player-btn" onclick="addNewSpeeldag()" style="background: #e67e22;">
+				          ➕ Toevoegen
+				        </button>
+				      </div>
+				    </div>
+				    
+				    <!-- Statistieken overzicht -->
+				    <div class="stats-summary">
+				      <div class="stats-item">
+				        <div>Totaal speeldagen</div>
+				        <div class="stats-value">${totalSpeeldagen}</div>
+				      </div>
+				      <div class="stats-item">
+				        <div>Eerste speeldag</div>
+				        <div class="stats-value">${totalSpeeldagen > 0 ? state.speeldagen[0].displayDatum : 'N/A'}</div>
+				      </div>
+				      <div class="stats-item">
+				        <div>Laatste speeldag</div>
+				        <div class="stats-value">${totalSpeeldagen > 0 ? state.speeldagen[state.speeldagen.length - 1].displayDatum : 'N/A'}</div>
+				      </div>
+				    </div>
+				    
+				    <!-- SPEELDAGENLIJST -->
+				    <div class="speeldagen-list-container">
+				      <h3 style="margin-bottom: 20px;">📋 Alle Speeldagen (${totalSpeeldagen})</h3>
+				      
+				      <!-- Bulk acties -->
+				      <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+				        <button class="bulk-action-btn" onclick="clearAllSpeeldagen()" style="background: #e74c3c;">
+				          🗑️ Alle Speeldagen Verwijderen
+				        </button>
+				      </div>
+				      
+				      <!-- HEADER -->
+				      <div class="speeldagen-list-header">
+				        <div>Volgnr</div>
+				        <div>Datum</div>
+				        <div>Excel Datum</div>
+				        <div>Acties</div>
+				      </div>
+				      
+				      <!-- SPEELDAGEN CONTENT -->
+				      <div id="speeldagenListContent">
+				        ${totalSpeeldagen === 0 ? 
+				          '<div class="empty-speeldagen-message">Geen speeldagen gevonden. Voeg speeldagen toe via het formulier of importeer een CSV.</div>' : 
+				          ''}
+				      </div>
+				    </div>
+				  </div>
 				`;
-                        
-                        <!-- Formulier voor nieuwe speeldag -->
-                        <div class="speeldagen-form-container">
-                            <h3>➕ Nieuwe Speeldag Toevoegen</h3>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Volgnummer *</label>
-                                    <input type="number" id="speeldagVolgnummer" class="form-input" 
-                                           placeholder="bijv. 1" min="1" max="100"
-                                           value="${state.speeldagen.length > 0 ? Math.max(...state.speeldagen.map(s => s.volgnummer)) + 1 : 1}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Datum *</label>
-                                    <input type="date" id="speeldagDatum" class="form-input" 
-                                           value="${formatDateForInput(new Date())}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Excel Datum (optioneel)</label>
-                                    <input type="number" id="speeldagExcelDatum" class="form-input" 
-                                           placeholder="Excel datumnummer">
-                                </div>
-                                <button class="add-player-btn" onclick="addNewSpeeldag()" style="background: #e67e22;">
-                                    ➕ Toevoegen
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Statistieken overzicht -->
-                        <div class="stats-summary">
-                            <div class="stats-item">
-                                <div>Totaal speeldagen</div>
-                                <div class="stats-value">${totalSpeeldagen}</div>
-                            </div>
-                            <div class="stats-item">
-                                <div>Eerste speeldag</div>
-                                <div class="stats-value">${totalSpeeldagen > 0 ? state.speeldagen[0].displayDatum : 'N/A'}</div>
-                            </div>
-                            <div class="stats-item">
-                                <div>Laatste speeldag</div>
-                                <div class="stats-value">${totalSpeeldagen > 0 ? state.speeldagen[state.speeldagen.length - 1].displayDatum : 'N/A'}</div>
-                            </div>
-                        </div>
-                        
-                        <!-- SPEELDAGENLIJST -->
-                        <div class="speeldagen-list-container">
-                            <h3 style="margin-bottom: 20px;">📋 Alle Speeldagen (${totalSpeeldagen})</h3>
-                            
-                            <!-- Bulk acties -->
-                            <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-                                <button class="bulk-action-btn" onclick="clearAllSpeeldagen()" style="background: #e74c3c;">
-                                    🗑️ Alle Speeldagen Verwijderen
-                                </button>
-                            </div>
-                            
-                            <!-- HEADER -->
-                            <div class="speeldagen-list-header">
-                                <div>Volgnr</div>
-                                <div>Datum</div>
-                                <div>Excel Datum</div>
-                                <div>Acties</div>
-                            </div>
-                            
-                            <!-- SPEELDAGEN CONTENT -->
-                            <div id="speeldagenListContent">
-                                ${totalSpeeldagen === 0 ? 
-                                    '<div class="empty-speeldagen-message">Geen speeldagen gevonden. Voeg speeldagen toe via het formulier of importeer een CSV.</div>' : 
-                                    ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
+				
+				if (totalSpeeldagen > 0) {
+				  renderSpeeldagenList();
+				}
                 
                 if (totalSpeeldagen > 0) {
                     renderSpeeldagenList();

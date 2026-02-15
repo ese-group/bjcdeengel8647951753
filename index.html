@@ -4172,6 +4172,27 @@ function fixEncoding(text) {
                 }
             }
 
+			// NIEUWE FUNCTIE (plaats deze eronder)
+			window.refreshPlayersFromGoogleSheet = async function() {
+			  if (confirm('Spelers herladen van Google Sheet?\nLokale wijzigingen gaan verloren.')) {
+			    const success = await loadPlayersFromGoogleSheet();
+			    if (success) {
+			      alert(`✅ ${state.players.length} spelers geladen van Google Sheet!`);
+			      // Herlaad de spelers tab
+			      if (state.currentMatchesTab === 'players') {
+			        loadPlayersManagementTab();
+			      }
+			    } else {
+			      alert('❌ Kon spelers niet laden van Google Sheet.\nControleer of het tabblad "Spelers" bestaat en toegankelijk is.');
+			    }
+			  }
+			}
+
+
+
+
+			
+
             // ==================== SPELERS BEHEER FUNCTIES ====================
             window.showMatchesTab = function(tab) {
                 state.currentMatchesTab = tab;

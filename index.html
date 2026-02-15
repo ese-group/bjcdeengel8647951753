@@ -4084,6 +4084,78 @@ function fixEncoding(text) {
                 }
             }
 
+
+
+			// LAAD SPELERS UIT GOOGLE SHEETS (TABBLAD "SPELERS")
+			async function loadPlayersFromGoogleSheet() {
+			  try {
+			    console.log('🔁 Laad spelers uit Google Sheet...');
+			    
+			    // 🔑 VUL HIER JOUW GOOGLE SHEET ID IN
+			    const SHEET_ID = '1YKOPBvj7SCfIVuUedoCAXNkeQ0NSrA0PGGfKdloMPs8';
+			    
+			    // URL om data uit tabblad "Spelers" te halen als CSV
+			    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Spelers`;
+			    
+			    const response = await fetch(url);
+			    if (!response.ok) {
+			      console.log('❌ Kon Google Sheet niet laden');
+			      return false;
+			    }
+			    
+			    const csvText = await response.text();
+			    const lines = csvText.split(/\r\n|\n/);
+			    const players = [];
+			    
+			    // Skip koptekst (regel 0)
+			    for (let i = 1; i < lines.length; i++) {
+			      const line = lines[i].trim();
+			      if (!line) continue;
+			      
+			      // Splits op komma, maar houd rekening met aanhalingstekens
+			      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+			      
+			      if (parts.length >= 3) {
+			        let name = parts[0].trim().replace(/^"(.*)"$/, '$1');
+			        let tsg = parts[1].trim().replace(/^"(.*)"$/, '$1');
+			        let target = parts[2].trim().replace(/^"(.*)"$/, '$1');
+			        
+			        // Controleer of naam bestaat
+			        if (!name) continue;
+			        
+			        // Zet target om naar getal
+			        const targetNum = parseInt(target) || 50;
+			        
+			        players.push({
+			          name: name,
+			          tsg: tsg || '0,000',
+			          target: targetNum
+			        });
+			      }
+			    }
+			    
+			    if (players.length === 0) {
+			      console.log('⚠️ Geen geldige spelers gevonden in Google Sheet');
+			      return false;
+			    }
+			    
+			    console.log(`✅ ${players.length} spelers geladen uit Google Sheet`);
+			    
+			    // Opslaan in state en localStorage
+			    state.players = players;
+			    state.players.sort((a, b) => a.name.localeCompare(b.name));
+			    savePlayersToStorage();
+			    
+			    return true;
+			    
+			  } catch (error) {
+			    console.error('⚠️ Fout bij laden uit Google Sheet:', error.message);
+			    return false;
+			  }
+			}
+
+
+			
             window.refreshPlayersFromGitHub = async function() {
                 if (confirm('Spelers herladen van GitHub?\n\nLokale wijzigingen gaan verloren.')) {
                     const success = await loadPlayersFromGitHub();

@@ -2469,11 +2469,11 @@
             </div>
             
             <div class="action-buttons">
+                <!-- UNDO KNOP (nu links) -->
+                <button class="action-btn" onclick="undoLastAdd()" id="undoBtn" disabled>↩️ Ongedaan maken</button>
                 <button class="action-btn confirm-btn" onclick="addScore()" id="confirmScoreBtn">
                     Einde beurt voor <span id="currentPlayerBtnName">Speler</span> en score toevoegen
                 </button>
-                <!-- UNDO KNOP -->
-                <button class="action-btn" onclick="undoLastAdd()" id="undoBtn" disabled>↩️ Ongedaan maken</button>
             </div>
             
             <div class="players-container">
@@ -2596,7 +2596,7 @@
     <script>
         // ==================== LOGIN FUNCTIES ====================
         const CLUB_PASSWORD = "Biljart8647";
-        const APP_VERSION = "1.0.6"; // versie verhoogd vanwege undo en te spelen gem.
+        const APP_VERSION = "1.0.7"; // versie verhoogd voor aanpassingen TSG en undo positie
         const DEFAULT_ADMIN_PASSWORD = "admin123";
         
         function checkPassword() {
@@ -2640,8 +2640,8 @@
                 downloadedMatches: [],
                 players: [],
                 currentMatch: null,
-                player1: { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false },
-                player2: { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false },
+                player1: { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false, fixedTSG: '−' },
+                player2: { score: 0, turns: [], target: 0, beurtNummer: 1, highestSeries: 0, isWhite: false, fixedTSG: '−' },
                 currentPlayer: 1,
                 turnNumber: 1,
                 matchEnded: false,
@@ -3238,6 +3238,13 @@ window.showPage = function(pageNum) {
                 
                 const whitePlayer = state.selectedWhitePlayer;
                 
+                // Zoek de vaste TSG van elke speler in de spelerslijst
+                let player1TSG = '−', player2TSG = '−';
+                const player1Obj = state.players.find(p => p.name === state.currentMatch.p1);
+                const player2Obj = state.players.find(p => p.name === state.currentMatch.p2);
+                if (player1Obj && player1Obj.tsg) player1TSG = player1Obj.tsg;
+                if (player2Obj && player2Obj.tsg) player2TSG = player2Obj.tsg;
+                
                 // RESET ALLE SPELER VARIABELEN
                 state.player1 = { 
                     score: 0, 
@@ -3245,7 +3252,8 @@ window.showPage = function(pageNum) {
                     target: 0, 
                     beurtNummer: 1, 
                     highestSeries: 0, 
-                    isWhite: false 
+                    isWhite: false,
+                    fixedTSG: player1TSG
                 };
                 state.player2 = { 
                     score: 0, 
@@ -3253,7 +3261,8 @@ window.showPage = function(pageNum) {
                     target: 0, 
                     beurtNummer: 1, 
                     highestSeries: 0, 
-                    isWhite: false 
+                    isWhite: false,
+                    fixedTSG: player2TSG
                 };
                 state.firstToTarget = null;
                 state.isNabeurt = false;
@@ -3736,11 +3745,9 @@ window.showPage = function(pageNum) {
                 const needed1 = Math.max(0, state.player1.target - state.player1.score);
                 const needed2 = Math.max(0, state.player2.target - state.player2.score);
                 
-                // Bereken te spelen gemiddelde
-                const gem1 = state.player1.turns.length > 0 ? state.player1.score / state.player1.turns.length : 0;
-                const gem2 = state.player2.turns.length > 0 ? state.player2.score / state.player2.turns.length : 0;
-                const teSpelenGem1 = gem1 > 0 ? ((state.player1.target - state.player1.score) / gem1).toFixed(1) : '−';
-                const teSpelenGem2 = gem2 > 0 ? ((state.player2.target - state.player2.score) / gem2).toFixed(1) : '−';
+                // Gebruik vaste TSG voor "Te spelen gem."
+                const fixedTSG1 = state.player1.fixedTSG || '−';
+                const fixedTSG2 = state.player2.fixedTSG || '−';
                 
                 const player1TurnsReversed = [...state.player1.turns].reverse();
                 const player2TurnsReversed = [...state.player2.turns].reverse();
@@ -3777,7 +3784,7 @@ window.showPage = function(pageNum) {
                             <div class="stat-item">
                                 <div class="stat-icon">⏳</div>
                                 <div>Te spelen gem.:</div>
-                                <div class="stat-value">${teSpelenGem1}</div>
+                                <div class="stat-value">${fixedTSG1}</div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-icon">⭐</div>
@@ -3836,7 +3843,7 @@ window.showPage = function(pageNum) {
                             <div class="stat-item">
                                 <div class="stat-icon">⏳</div>
                                 <div>Te spelen gem.:</div>
-                                <div class="stat-value">${teSpelenGem2}</div>
+                                <div class="stat-value">${fixedTSG2}</div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-icon">⭐</div>

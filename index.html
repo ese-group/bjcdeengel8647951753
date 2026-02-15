@@ -251,12 +251,6 @@
             align-items: stretch;
         }
         
-        .current-turn-container {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        
         .current-turn {
             text-align: center;
             font-size: 1.2em;
@@ -273,10 +267,6 @@
             border: 3px solid #27ae60;
         }
 
-
-
-
-        
         /* NIEUWE STIJLEN VOOR WIT/GEEL SCORE DISPLAYS */
         .side-score-display {
             flex: 0 0 80px;
@@ -371,14 +361,14 @@
         .current-score-container {
             position: relative;
             width: 100%;
-            height: 100px; /* Verkleind van 140px */
+            height: 100px;
             margin-bottom: 10px;
         }
         
         .current-score-display {
             position: absolute;
             top: 0;
-            width: 40%; /* Verkleind van 45% */
+            width: 40%;
             padding: 15px 10px;
             border-radius: 12px;
             text-align: center;
@@ -405,16 +395,10 @@
             white-space: nowrap;
         }
 
-
-
-
-
-        
-
         .current-score-display.active {
-        display: flex;
-        transform: scale(1.05);
-        z-index: 20;
+            display: flex;
+            transform: scale(1.05);
+            z-index: 20;
         }
         
         .current-score-display.inactive {
@@ -423,7 +407,7 @@
         
         .current-score-display.player1-current {
             position: absolute;
-            left: 0; /* Iets verder van de rand */
+            left: 0;
             background-color: white;
             border: 3px solid #3182ce;
             color: black;
@@ -431,7 +415,7 @@
     
         .current-score-display.player2-current {
             position: absolute;
-            right: 0; /* Iets verder van de rand */
+            right: 0;
             background-color: #f1c40f;
             border: 3px solid #3182ce;
             color: black;
@@ -445,21 +429,21 @@
         }
         
         .current-score-name {
-        font-size: 1rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #2d3748;
-        background: rgba(0,0,0,0.05);
-        padding: 3px 10px;
-        border-radius: 15px;
-        max-width: 90%;
-        overflow: hidden;
-        text-overflow: ellipsis;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+            background: rgba(0,0,0,0.05);
+            padding: 3px 10px;
+            border-radius: 15px;
+            max-width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
         }
     
         .current-score-value {
-            font-size: 2.5rem; /* Verkleind van 3.5rem */
+            font-size: 2.5rem;
             font-weight: bold;
             color: #2d3748;
         }
@@ -481,11 +465,12 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
+        /* ===== KLEINERE "EINDE BEURT" KNOP (AANGEPAST) ===== */
         .action-btn {
-            padding: 16px 30px;
-            font-size: 1.2em;
+            padding: 12px 20px;  /* Was 16px 30px */
+            font-size: 1.1em;     /* Was 1.2em */
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;   /* Iets minder rond, past beter */
             cursor: pointer;
             font-weight: bold;
             letter-spacing: 0.5px;
@@ -495,7 +480,7 @@
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
             flex-grow: 1;
-            max-width: 85%;
+            max-width: 75%;        /* Iets smaller */
             box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
             transition: all 0.3s ease;
         }
@@ -1226,1140 +1211,1059 @@
             border-color: #2ecc71;
         }
 
-
-
-	/* Stats & Ranking Stijlen */
-	/* ==================== STATS & RANKING STYLES ==================== */
-
-	.players-stats-grid {
-	    display: grid;
-	    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-	    gap: 20px;
-	    padding: 20px 0;
-	}
-	.player-stats-card {
-	    background: #34495e;
-	    border-radius: 12px;
-	    padding: 20px;
-	    border-left: 5px solid #3498db;
-	    transition: transform 0.3s;
-	}
-	
-	.player-stats-card:hover {
-	    transform: translateY(-5px);
-	    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-	}
-	
-	.player-stats-card h3 {
-	    margin: 0 0 15px 0;
-	    color: #ecf0f1;
-	    font-size: 1.3em;
-	}
-	
-	.detail-btn {
-	    background: #3498db;
-	    color: white;
-	    border: none;
-	    padding: 10px 15px;
-	    border-radius: 6px;
-	    cursor: pointer;
-	    width: 100%;
-	    margin-bottom: 15px;
-	    font-size: 0.9em;
-	}
-	
-	.detail-btn:hover {
-	    background: #2980b9;
-	}
-	
-	.stats-summary {
-	    display: grid;
-	    grid-template-columns: 1fr 1fr;
-	    gap: 10px;
-	    font-size: 0.9em;
-	}
-	
-	.stats-summary p {
-	    margin: 5px 0;
-	    color: #bdc3c7;
-	}
-	
-	/* Ranking Table */
-	.ranking-container {
-	    overflow-x: auto;
-	    margin-top: 20px;
-	}
-	
-	.ranking-table {
-	    width: 100%;
-	    border-collapse: collapse;
-	    background: #34495e;
-	    border-radius: 10px;
-	    overflow: hidden;
-	}
-	
-	.ranking-table th {
-	    background: #2c3e50;
-	    color: #3498db;
-	    padding: 15px;
-	    text-align: left;
-	    font-weight: bold;
-	}
-	
-	.ranking-table td {
-	    padding: 12px 15px;
-	    border-bottom: 1px solid #2c3e50;
-	}
-	
-	.ranking-table tr:last-child td {
-	    border-bottom: none;
-	}
-	
-	.ranking-table tr:hover {
-	    background: #3b5998;
-	}
-	
-	.ranking-table .top-player {
-	    background: rgba(52, 152, 219, 0.1);
-	}
-	
-	.ranking-table .top-player td:first-child {
-	    font-weight: bold;
-	    color: #f1c40f;
-	}
-	
-	/* Player Detail */
-	.player-detail {
-	    padding: 20px;
-	}
-	
-	.back-btn {
-	    background: #7f8c8d;
-	    color: white;
-	    border: none;
-	    padding: 10px 20px;
-	    border-radius: 6px;
-	    cursor: pointer;
-	    margin-bottom: 20px;
-	}
-	
-	.stats-grid {
-	    display: grid;
-	    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-	    gap: 15px;
-	    margin: 20px 0;
-	}
-	
-	.stat-box {
-	    background: #34495e;
-	    border-radius: 10px;
-	    padding: 20px;
-	    text-align: center;
-	    border-top: 4px solid #3498db;
-	}
-	
-	.stat-box h3 {
-	    font-size: 2em;
-	    margin: 0;
-	    color: #ecf0f1;
-	}
-	
-	.stat-box p {
-	    margin: 10px 0 0 0;
-	    color: #bdc3c7;
-	    font-size: 0.9em;
-	}
-	
-	.match-history {
-	    margin-top: 30px;
-	}
-	
-	.match-history-item {
-	    display: grid;
-	    grid-template-columns: 2fr 2fr 1fr 1fr;
-	    gap: 15px;
-	    padding: 15px;
-	    background: #34495e;
-	    margin-bottom: 10px;
-	    border-radius: 8px;
-	    align-items: center;
-	}
-	
-	.match-history-item.win {
-	    border-left: 4px solid #2ecc71;
-	}
-	
-	.match-history-item.loss {
-	    border-left: 4px solid #e74c3c;
-	}
-	
-	.match-history-item .result {
-	    font-weight: bold;
-	    padding: 5px 10px;
-	    border-radius: 4px;
-	    text-align: center;
-	}
-	
-	.match-history-item.win .result {
-	    background: rgba(46, 204, 113, 0.2);
-	    color: #2ecc71;
-	}
-	
-	.match-history-item.loss .result {
-	    background: rgba(231, 76, 60, 0.2);
-	    color: #e74c3c;
-	}
-	
-	/* Messages */
-	.no-data-message, .error-message {
-	    text-align: center;
-	    padding: 40px 20px;
-	    background: #34495e;
-	    border-radius: 10px;
-	    margin: 20px 0;
-	}
-	
-	.no-data-message h3, .error-message h3 {
-	    color: #f1c40f;
-	}
-	
-	/* Responsive */
-	@media (max-width: 768px) {
-	    .players-stats-grid {
-	        grid-template-columns: 1fr;
-	    }
-	    
-	    .match-history-item {
-	        grid-template-columns: 1fr;
-	        gap: 5px;
-	    }
-    
-	    .stats-grid {
-	        grid-template-columns: repeat(2, 1fr);
-	    }
-	}
-
-
-
-/* ==================== EXCEL SPECIFIEKE STIJLEN ==================== */
-
-/* Excel Card Styling */
-.excel-stats-card {
-    border-left: 5px solid #3498db;
-    position: relative;
-}
-
-.card-header-excel {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.match-count-badge {
-    background: #3498db;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.8em;
-    font-weight: bold;
-}
-
-.excel-detail-btn {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    margin-bottom: 15px;
-}
-
-.excel-summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    font-size: 0.9em;
-    margin-bottom: 15px;
-}
-
-.excel-target-box {
-    background: rgba(52, 152, 219, 0.1);
-    border: 2px solid #3498db;
-    border-radius: 8px;
-    padding: 10px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.excel-target-box.target-achieved {
-    background: rgba(46, 204, 113, 0.1);
-    border-color: #2ecc71;
-}
-
-.excel-target-box.target-pending {
-    background: rgba(241, 196, 15, 0.1);
-    border-color: #f1c40f;
-}
-
-.target-label {
-    display: block;
-    font-weight: bold;
-    color: #3498db;
-    margin-bottom: 5px;
-}
-
-.target-value {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.target-success, .target-warning {
-    display: block;
-    font-size: 0.8em;
-    margin-top: 5px;
-}
-
-.target-success {
-    color: #27ae60;
-}
-
-.target-warning {
-    color: #e67e22;
-}
-
-/* Excel Ranking Table */
-.excel-ranking-table th {
-    background: #2c3e50;
-    color: #3498db;
-    font-size: 0.9em;
-    padding: 12px 8px;
-}
-
-.excel-ranking-table td {
-    padding: 10px 8px;
-    font-size: 0.9em;
-}
-
-.rank-position {
-    font-weight: bold;
-    color: #f1c40f;
-}
-
-.rank-score {
-    font-weight: bold;
-    color: #2ecc71;
-}
-
-.rank-target {
-    color: #3498db;
-    font-weight: bold;
-}
-
-.rank-average {
-    color: #9b59b6;
-}
-
-.status-qualified {
-    color: #27ae60;
-}
-
-.status-pending {
-    color: #e67e22;
-}
-
-.excel-top-player {
-    background: rgba(241, 196, 15, 0.15) !important;
-}
-
-.excel-top-player td:first-child {
-    font-weight: bold;
-    color: #f1c40f !important;
-}
-
-.ranking-legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9em;
-    color: #bdc3c7;
-}
-
-.legend-color {
-    width: 15px;
-    height: 15px;
-    border-radius: 3px;
-}
-
-.legend-color.gold {
-    background: rgba(241, 196, 15, 0.3);
-    border: 1px solid #f1c40f;
-}
-
-.legend-color.qualified {
-    background: rgba(46, 204, 113, 0.3);
-    border: 1px solid #2ecc71;
-}
-
-.legend-color.pending {
-    background: rgba(230, 126, 34, 0.3);
-    border: 1px solid #e67e22;
-}
-
-/* Excel Detail View */
-.excel-detail-view .detail-header {
-    margin-bottom: 25px;
-}
-
-.ref-values {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    background: rgba(52, 152, 219, 0.1);
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
-}
-
-.ref-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.ref-label {
-    font-weight: bold;
-    color: #3498db;
-    font-size: 0.9em;
-}
-
-.ref-value {
-    background: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.excel-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-    margin: 25px 0;
-}
-
-.target-stat-box {
-    border-top: 4px solid #3498db;
-}
-
-.target-stat-box.target-achieved {
-    border-top-color: #2ecc71;
-}
-
-.target-stat-box.target-pending {
-    border-top-color: #f1c40f;
-}
-
-/* ==================== EXCEL TABEL STIJLEN ==================== */
-/* ==================== EXCEL TABEL STIJLEN - COMPLEET GEWIJZIGD ==================== */
-/* Hoofd container */
-.excel-table-container {
-    margin: 20px 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background: white;
-}
-
-/* Bovenste header met titel en knop */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #2c3e50;
-    padding: 15px 20px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-.table-header h3 {
-    margin: 0;
-    color: #ecf0f1;
-    font-family: 'Cavolini', Arial, sans-serif;
-}
-
-.small-btn {
-    padding: 8px 15px;
-    font-size: 0.9em;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Tabel wrapper voor horizontaal scrollen */
-.table-wrapper {
-    overflow-x: auto;
-}
-
-/* BASIS TABEL STIJL */
-.excel-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1200px;
-}
-
-/* ========== EERSTE RIJ (speler header) - LICHTBLAUW ========== */
-.excel-table .excel-header tr:first-child th {
-    background: #d9e1f2 !important; /* Lichtblauw achtergrond voor ALLE cellen */
-    font-weight: bold;
-    font-size: 12px;
-    padding: 10px 4px;
-    border: 1px solid #44546a;
-    text-align: center;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
-    /* GEEN algemene color regel hier! Laat individuele klassen bepalen */
-}
-
-/* Spelernaam (eerste 3 cellen) - RODE TEKST */
-.excel-table .excel-header tr:first-child th:first-child {
-    color: #ff0000 !important; /* Rode tekst voor spelernaam */
-}
-
-/* "1,00" en "20" - RODE TEKST (EERST deze regel) */
-.excel-table .excel-header tr:first-child th.red-text {
-    color: #ff0000 !important; /* Rood */
-    font-weight: bold;
-}
-
-/* "Gemiddelde", "Te maken punten", "Behaalde matchpunten" - ZWARTE TEKST (DAARNA deze) */
-.excel-table .excel-header tr:first-child th.header-text-black {
-    color: #000000 !important; /* Zwarte tekst */
-    font-weight: bold;
-}
-
-/* Bruine cellen voor referentiewaarden (TargetEersteZes en TSGEersteZes) */
-.excel-table .excel-header tr:first-child th.beige-bg {
-    background: #f4dbbc !important; /* Lichtbruin voor G1 en K1 */
-    color: #000000 !important;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
-}
-
-/* ========== TWEEDE RIJ (kolomkoppen) - LICHTBLAUW ========== */
-.excel-subheader {
-    background: #d9e1f2 !important; /* Lichtblauw */
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
-}
-
-.excel-subheader th {
-    padding: 8px 4px;
-    text-align: center;
-    font-weight: bold;
-    border: 1px solid #44546a; /* Donkere rand */
-    color: #000000 !important; /* Zwarte tekst */
-    font-size: 11px;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
-}
-
-/* Kolom P: "Behaalde matchpunten" (heeft rijspan 2) - ZWARTE TEKST */
-.excel-table th[colspan="1"][rowspan="2"] {
-    background: #d9e1f2 !important; /* Lichtblauw */
-    color: #000000 !important; /* Zwarte tekst */
-    font-weight: bold;
-    border: 1px solid #44546a;
-    vertical-align: middle;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
-}
-
-/* ========== DATA RIJEN - CALIBRI FONT ========== */
-.excel-cell {
-    padding: 6px 4px;
-    border: 1px solid #ddd;
-    text-align: center;
-    color: #000000; /* Zwarte tekst standaard */
-    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif !important; /* Calibri voor cijfers */
-}
-
-/* Afwisselende rij kleuren */
-.excel-even {
-    background: #ffffff; /* Wit */
-}
-
-.excel-odd {
-    background: #f9f9f9; /* Licht grijs */
-}
-
-/* Nummer cellen (monospace font voor cijfers) */
-.excel-cell.number {
-    font-family: 'Calibri', 'Courier New', monospace !important;
-    font-weight: bold;
-}
-
-/* Percentage cellen */
-.excel-cell.percentage {
-    font-weight: bold;
-}
-
-/* Gewonnen vs Verloren matches */
-.excel-won {
-    background: rgba(46, 204, 113, 0.2) !important; /* Groene achtergrond */
-}
-
-.excel-lost {
-    background: rgba(231, 76, 60, 0.1) !important; /* Rode achtergrond */
-}
-
-/* ========== TOTAAL RIJ (eerste samenvattingsrij) ========== */
-.excel-summary-1 {
-    background: #d9e1f2 !important; /* Lichtblauw achtergrond */
-    font-weight: bold;
-    font-size: 13px; /* Iets groter font */
-    padding: 12px 4px !important; /* Meer padding voor hogere rij */
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    border-top: 2px solid #44546a !important; /* DIKKERE bovenrand */
-    height: 40px !important; /* Expliciete hoogte */
-}
-
-.excel-summary-1 td {
-    padding: 12px 4px !important; /* Meer hoogte */
-    border: 1px solid #44546a;
-    font-size: 13px;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    font-weight: bold;
-    color: #000000 !important; /* Zwarte tekst */
-}
-
-/* Samenvatting labels (links uitgelijnd) */
-.summary-label {
-    font-weight: bold;
-    text-align: left !important;
-    padding-left: 10px !important;
-    color: #000000 !important; /* Zwart */
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-}
-
-.summary-value {
-    font-weight: bold;
-    color: #000000 !important; /* Zwart */
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-}
-
-.summary-dash {
-    color: #000000 !important; /* Zwart */
-    font-weight: bold;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-}
-
-/* ========== TE MAKEN PUNTEN RIJ (tweede samenvattingsrij) ========== */
-.excel-summary-2 {
-    background: #fff9c4 !important; /* Licht geel voor achtergrond */
-    font-weight: bold;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-}
-
-.excel-summary-2 td {
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    font-weight: bold;
-    border: 1px solid #44546a;
-}
-
-/* "Te maken punten volgend seizoen ..." - RODE TEKST, ENKEL STANDAARD RAND */
-.target-label {
-    text-align: center !important; /* Horizontaal gecentreerd */
-    vertical-align: middle !important; /* Verticaal gecentreerd */
-    padding: 10px 4px !important;
-    font-weight: bold;
-    color: #ff0000 !important; /* RODE TEKST */
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    background: #fff9c4 !important; /* Lichtgele achtergrond zoals rest van rij */
-    border: 1px solid #44546a !important; /* ENKEL deze standaard rand */
-    /* Verwijder alle extra border properties: */
-    border-left: 1px solid #44546a !important;
-    border-right: 1px solid #44546a !important;
-    border-top: 1px solid #44546a !important;
-    border-bottom: 1px solid #44546a !important;
-}
-
-/* Target berekening cel (K kolom) - GRIJZE ACHTERGROND */
-.target-calc {
-    background: #d3d3d3 !important; /* Grijze achtergrond */
-    color: #e74c3c !important; /* Rode tekst */
-    font-weight: bold;
-    text-align: center !important;
-    vertical-align: middle !important;
-    padding: 10px 4px !important;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    border: 1px solid #44546a !important;
-}
-
-/* Eindresultaat cel (L kolom) - GRIJZE ACHTERGROND */
-.target-final {
-    background: #d3d3d3 !important; /* Grijze achtergrond */
-    color: #27ae60 !important; /* Groene tekst */
-    font-weight: bold;
-    font-size: 13px;
-    text-align: center !important;
-    vertical-align: middle !important;
-    padding: 10px 4px !important;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    border: 1px solid #44546a !important;
-}
-
-/* Waarschuwingscel */
-.warning-text {
-    text-align: center !important;
-    color: #e74c3c !important; /* Rood */
-    font-weight: bold;
-    padding: 10px !important;
-    font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
-    border: 1px solid #44546a !important;
-}
-
-/* ========== SPECIFIEKE KLEUREN VOOR PERCENTAGES ========== */
-/* POSITIEF (groen) */
-.percentage-positive {
-    color: #27ae60 !important; /* Groen */
-    font-weight: bold;
-}
-
-/* NEGATIEF (rood) */
-.percentage-negative {
-    color: #e74c3c !important; /* Rood */
-    font-weight: bold;
-}
-
-/* NEUTRAAL (grijs) */
-.percentage-neutral {
-    color: #7f8c8d !important; /* Grijs */
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .excel-table {
-        font-size: 11px;
-        min-width: 1000px;
-    }
-    
-    .excel-subheader th {
-        font-size: 10px;
-        padding: 6px 2px;
-    }
-    
-    .excel-cell {
-        padding: 4px 2px;
-    }
-    
-    .excel-summary-1 td,
-    .excel-summary-2 td {
-        padding: 8px 2px !important;
-        font-size: 11px;
-    }
-    
-    .target-label,
-    .target-calc,
-    .target-final {
-        padding: 8px 2px !important;
-    }
-}
-
-/* ==================== EXCEL KLASSEMENT STIJL (VBA MACRO) ==================== */
-
-/* Hoofd container voor klassement */
-.excel-klassement-container {
-    margin: 20px 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background: white;
-}
-
-/* Klassement titel - COMIC SANS MS */
-.klassement-title {
-    background: #4472c4; /* Excel accent5 kleur */
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #44546a;
-}
-
-.klassement-title h1 {
-    margin: 0;
-    font-family: 'Comic Sans MS', cursive, sans-serif !important;
-    font-size: 24px !important;
-    color: #0078d4 !important; /* Excel blauw: -16776961 = #0078d4 */
-    font-weight: normal;
-}
-
-/* Tabel wrapper voor horizontaal scrollen */
-.klassement-wrapper {
-    overflow-x: auto;
-}
-
-/* BASIS KLASSEMENT TABEL - EXCEL STIJL */
-.klassement-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1200px;
-    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
-}
-
-/* ========== KOPTEKST RIJEN ========== */
-
-/* EERSTE RIJ (titelrij) */
-.klassement-table tr:nth-child(1) {
-    background: #4472c4 !important; /* accent6 met tint 0.799981688894314 */
-    height: 37.5px !important;
-}
-
-/* TWEEDE RIJ (Naam + speeldagnummers) */
-.klassement-table tr:nth-child(2) th {
-    background: #4472c4 !important; /* accent6 met tint 0.799981688894314 */
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    border: 1px solid #44546a;
-    font-size: 12px;
-}
-
-/* "Naam" cel in rij 2-3 gespannen */
-.klassement-table tr:nth-child(2) th.naam-header {
-    text-align: center;
-    vertical-align: bottom;
-    background: #4472c4 !important; /* accent6 met tint 0.799981688894314 */
-}
-
-/* DERDE RIJ (datums + "totaal" kolommen) */
-.klassement-table tr:nth-child(3) th {
-    background: #4472c4 !important; /* accent6 met tint 0.799981688894314 */
-    color: white;
-    text-align: center;
-    border: 1px solid #44546a;
-    font-size: 11px;
-    padding: 4px 2px;
-}
-
-/* Datum cellen (d-mmm formaat) */
-.klassement-table tr:nth-child(3) th.datum-header {
-    background: #4472c4 !important;
-    color: white;
-    text-align: center;
-    font-size: 11px;
-    border: 1px solid #44546a;
-}
-
-/* "totaal" kolommen VERTICAAL geschreven */
-.klassement-table tr:nth-child(3) th.totaal-column {
-    writing-mode: vertical-lr;
-    transform: rotate(180deg);
-    text-align: center;
-    vertical-align: middle;
-    width: 24px !important; /* 2.4 kolombreedte in Excel */
-    background: #4472c4 !important;
-    color: #0078d4 !important; /* accent5 kleur */
-    font-weight: bold;
-    border: 1px solid #44546a;
-}
-
-/* Laatste "totaal" kolom (eindtotaal) - SPECIAAL */
-.klassement-table tr:nth-child(3) th.final-total-column {
-    writing-mode: vertical-lr;
-    transform: rotate(180deg);
-    text-align: center;
-    vertical-align: middle;
-    width: 33px !important; /* 3.29 kolombreedte in Excel */
-    background: #4472c4 !important;
-    color: #0078d4 !important; /* accent5 kleur */
-    font-weight: bold;
-    border: 1px solid #44546a;
-}
-
-/* ========== DATA RIJEN (SPELERS) ========== */
-
-/* Speler naam kolom */
-.klassement-table td.speler-naam {
-    font-weight: bold;
-    text-align: left;
-    padding: 8px 4px;
-    border: 1px solid #44546a;
-    background: white;
-    min-width: 140px; /* 18.86 kolombreedte in Excel */
-}
-
-/* Matchpunten cellen (2 kolommen per speeldag) */
-.klassement-table td.match-punt {
-    text-align: center;
-    padding: 8px 2px;
-    border: 1px solid #44546a;
-    font-weight: bold;
-    min-width: 25px; /* 3.29 kolombreedte in Excel */
-    background: white;
-}
-
-/* Tussentotaal cellen (na elke speeldag) */
-.klassement-table td.tussentotaal {
-    text-align: center;
-    padding: 8px 2px;
-    border: 1px solid #44546a;
-    font-weight: bold;
-    background: #f4dbbc !important; /* accent2 met tint 0.599993896298105 */
-    color: #0078d4 !important; /* accent1 kleur */
-    min-width: 20px; /* 2.4 kolombreedte in Excel */
-    font-size: 13px;
-}
-
-/* Eindtotaal cel (laatste kolom) */
-.klassement-table td.eindtotaal {
-    text-align: center;
-    padding: 8px 4px;
-    border: 1px solid #44546a;
-    font-weight: bold;
-    font-size: 14px;
-    color: #0078d4 !important; /* Excel blauw */
-    background: #f4dbbc !important; /* accent4 met tint 0.799981688894314 */
-    min-width: 33px; /* 3.29 kolombreedte in Excel */
-}
-
-/* ========== KLEUREN OM DE 6 KOLOMMEN (GELE ACHTERGROND) ========== */
-
-/* Om de 6 kolommen (vanaf kolom C): gele achtergrond */
-.klassement-table tr:nth-child(n+4) td:nth-child(3n+3),
-.klassement-table tr:nth-child(n+4) td:nth-child(3n+4),
-.klassement-table tr:nth-child(n+4) td:nth-child(3n+5) {
-    background: #f4dbbc !important; /* accent4 met tint 0.799981688894314 */
-}
-
-/* Laatste kolom (eindtotaal) overschrijven met speciale stijl */
-.klassement-table tr:nth-child(n+4) td.eindtotaal {
-    background: #f4dbbc !important;
-    color: #0078d4 !important;
-}
-
-/* ========== BEREKENDE FORMULES (CSS PSEUDO-ELEMENTEN) ========== */
-
-/* Voor tussentotalen - toon som icoon */
-.klassement-table td.tussentotaal::before {
-    content: "Σ";
-    font-size: 10px;
-    color: #666;
-    margin-right: 2px;
-}
-
-/* Voor eindtotaal - toon som icoon */
-.klassement-table td.eindtotaal::before {
-    content: "∑";
-    font-size: 12px;
-    color: #0078d4;
-    margin-right: 4px;
-    font-weight: bold;
-}
-
-/* ========== SPECIALE STIJLEN VOOR SORTERING ========== */
-
-/* Sorteerbaar bij hover */
-.klassement-table th.sortable {
-    cursor: pointer;
-    position: relative;
-}
-
-.klassement-table th.sortable:hover {
-    background: #5b9bd5 !important;
-}
-
-/* Sorteer pijlen */
-.klassement-table th.sortable.asc::after {
-    content: " ▲";
-    font-size: 10px;
-    color: white;
-}
-
-.klassement-table th.sortable.desc::after {
-    content: " ▼";
-    font-size: 10px;
-    color: white;
-}
-
-/* ========== RANDEN ========== */
-.klassement-table th,
-.klassement-table td {
-    border: 1px solid #44546a !important;
-}
-
-/* Dikkere randen voor kopteksten */
-.klassement-table tr:nth-child(1) th,
-.klassement-table tr:nth-child(2) th,
-.klassement-table tr:nth-child(3) th {
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #44546a !important;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .klassement-table {
-        font-size: 11px;
-        min-width: 800px;
-    }
-    
-    .klassement-title h1 {
-        font-size: 18px !important;
-        padding: 10px;
-    }
-    
-    .klassement-table td.speler-naam {
-        min-width: 120px;
-        font-size: 12px;
-    }
-    
-    .klassement-table td.match-punt,
-    .klassement-table td.tussentotaal,
-    .klassement-table td.eindtotaal {
-        min-width: 20px;
-        padding: 4px 1px;
-        font-size: 11px;
-    }
-}
-
-/* ========== PRINT STIJLEN ========== */
-@media print {
-    .klassement-container {
-        box-shadow: none;
-        margin: 0;
-    }
-    
-    .klassement-table {
-        min-width: auto;
-        width: 100%;
-    }
-    
-    .klassement-title {
-        background: white !important;
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-    }
-    
-    .klassement-title h1 {
-        color: black !important;
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-    }
-    
-    .klassement-table th,
-    .klassement-table td {
-        background: white !important;
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-        border-color: black !important;
-    }
-    
-    /* Behoud gele achtergrond bij print */
-    .klassement-table tr:nth-child(n+4) td:nth-child(3n+3),
-    .klassement-table tr:nth-child(n+4) td:nth-child(3n+4),
-    .klassement-table tr:nth-child(n+4) td:nth-child(3n+5),
-    .klassement-table td.eindtotaal {
-        background: #fff2cc !important; /* Lichtgeel voor print */
-        -webkit-print-color-adjust: exact;
-        color-adjust: exact;
-    }
-}
-
-/* ========== NIEUWE STIJLEN VOOR SPEELDAGEN BEHEER ========== */
-.speeldagen-management-container {
-    padding: 20px;
-}
-
-.speeldagen-form-container {
-    background: #34495e;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-    border-left: 4px solid #e67e22;
-}
-
-.speeldagen-form-container h3 {
-    color: #e67e22;
-    margin-bottom: 20px;
-}
-
-.speeldagen-list-container {
-    background: #34495e;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.speeldagen-list-header {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr auto;
-    gap: 15px;
-    padding: 15px;
-    background: #2c3e50;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: #e67e22;
-}
-
-.speeldag-row {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr auto;
-    gap: 15px;
-    padding: 15px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    align-items: center;
-    transition: all 0.3s;
-}
-
-.speeldag-row:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-.speeldag-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.empty-speeldagen-message {
-    text-align: center;
-    padding: 40px;
-    color: #7f8c8d;
-    font-size: 1.1em;
-}
-
-.date-full-format {
-    font-weight: bold;
-    color: #ecf0f1;
-}
-
-.speeldag-volgnummer {
-    background: #e67e22;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    display: inline-block;
-    min-width: 30px;
-    text-align: center;
-}
-
-/* ========== SPEELDAGEN TABBLAD ========== */
-.tab-btn.speeldagen {
-    background: #2c3e50;
-}
-
-.tab-btn.speeldagen.active {
-    background: #e67e22;
-}
-
-.tab-btn.speeldagen:hover {
-    background: #d35400;
-}
-
+        /* Stats & Ranking Stijlen */
+        .players-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .player-stats-card {
+            background: #34495e;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s;
+        }
+        
+        .player-stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .player-stats-card h3 {
+            margin: 0 0 15px 0;
+            color: #ecf0f1;
+            font-size: 1.3em;
+        }
+        
+        .detail-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .detail-btn:hover {
+            background: #2980b9;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .stats-summary p {
+            margin: 5px 0;
+            color: #bdc3c7;
+        }
+        
+        /* Ranking Table */
+        .ranking-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #34495e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .ranking-table th {
+            background: #2c3e50;
+            color: #3498db;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .ranking-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        
+        .ranking-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .ranking-table tr:hover {
+            background: #3b5998;
+        }
+        
+        .ranking-table .top-player {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .ranking-table .top-player td:first-child {
+            font-weight: bold;
+            color: #f1c40f;
+        }
+        
+        /* Player Detail */
+        .player-detail {
+            padding: 20px;
+        }
+        
+        .back-btn {
+            background: #7f8c8d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border-top: 4px solid #3498db;
+        }
+        
+        .stat-box h3 {
+            font-size: 2em;
+            margin: 0;
+            color: #ecf0f1;
+        }
+        
+        .stat-box p {
+            margin: 10px 0 0 0;
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+        
+        .match-history {
+            margin-top: 30px;
+        }
+        
+        .match-history-item {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            background: #34495e;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            align-items: center;
+        }
+        
+        .match-history-item.win {
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .match-history-item.loss {
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .match-history-item .result {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .match-history-item.win .result {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+        
+        .match-history-item.loss .result {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        /* Messages */
+        .no-data-message, .error-message {
+            text-align: center;
+            padding: 40px 20px;
+            background: #34495e;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .no-data-message h3, .error-message h3 {
+            color: #f1c40f;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .players-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .match-history-item {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ==================== EXCEL SPECIFIEKE STIJLEN ==================== */
+        /* Excel Card Styling */
+        .excel-stats-card {
+            border-left: 5px solid #3498db;
+            position: relative;
+        }
+
+        .card-header-excel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .match-count-badge {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .excel-detail-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            margin-bottom: 15px;
+        }
+
+        .excel-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .excel-target-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .excel-target-box.target-achieved {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: #2ecc71;
+        }
+
+        .excel-target-box.target-pending {
+            background: rgba(241, 196, 15, 0.1);
+            border-color: #f1c40f;
+        }
+
+        .target-label {
+            display: block;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .target-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .target-success, .target-warning {
+            display: block;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .target-success {
+            color: #27ae60;
+        }
+
+        .target-warning {
+            color: #e67e22;
+        }
+
+        /* Excel Ranking Table */
+        .excel-ranking-table th {
+            background: #2c3e50;
+            color: #3498db;
+            font-size: 0.9em;
+            padding: 12px 8px;
+        }
+
+        .excel-ranking-table td {
+            padding: 10px 8px;
+            font-size: 0.9em;
+        }
+
+        .rank-position {
+            font-weight: bold;
+            color: #f1c40f;
+        }
+
+        .rank-score {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .rank-target {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .rank-average {
+            color: #9b59b6;
+        }
+
+        .status-qualified {
+            color: #27ae60;
+        }
+
+        .status-pending {
+            color: #e67e22;
+        }
+
+        .excel-top-player {
+            background: rgba(241, 196, 15, 0.15) !important;
+        }
+
+        .excel-top-player td:first-child {
+            font-weight: bold;
+            color: #f1c40f !important;
+        }
+
+        .ranking-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #bdc3c7;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .legend-color.gold {
+            background: rgba(241, 196, 15, 0.3);
+            border: 1px solid #f1c40f;
+        }
+
+        .legend-color.qualified {
+            background: rgba(46, 204, 113, 0.3);
+            border: 1px solid #2ecc71;
+        }
+
+        .legend-color.pending {
+            background: rgba(230, 126, 34, 0.3);
+            border: 1px solid #e67e22;
+        }
+
+        /* Excel Detail View */
+        .excel-detail-view .detail-header {
+            margin-bottom: 25px;
+        }
+
+        .ref-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .ref-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ref-label {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 0.9em;
+        }
+
+        .ref-value {
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .excel-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .target-stat-box {
+            border-top: 4px solid #3498db;
+        }
+
+        .target-stat-box.target-achieved {
+            border-top-color: #2ecc71;
+        }
+
+        .target-stat-box.target-pending {
+            border-top-color: #f1c40f;
+        }
+
+        /* ==================== EXCEL TABEL STIJLEN - COMPLEET GEWIJZIGD ==================== */
+        .excel-table-container {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2c3e50;
+            padding: 15px 20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            color: #ecf0f1;
+            font-family: 'Cavolini', Arial, sans-serif;
+        }
+
+        .small-btn {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .excel-table .excel-header tr:first-child th {
+            background: #d9e1f2 !important;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 10px 4px;
+            border: 1px solid #44546a;
+            text-align: center;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .excel-table .excel-header tr:first-child th:first-child {
+            color: #ff0000 !important;
+        }
+
+        .excel-table .excel-header tr:first-child th.red-text {
+            color: #ff0000 !important;
+            font-weight: bold;
+        }
+
+        .excel-table .excel-header tr:first-child th.header-text-black {
+            color: #000000 !important;
+            font-weight: bold;
+        }
+
+        .excel-table .excel-header tr:first-child th.beige-bg {
+            background: #f4dbbc !important;
+            color: #000000 !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .excel-subheader {
+            background: #d9e1f2 !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .excel-subheader th {
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #44546a;
+            color: #000000 !important;
+            font-size: 11px;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .excel-table th[colspan="1"][rowspan="2"] {
+            background: #d9e1f2 !important;
+            color: #000000 !important;
+            font-weight: bold;
+            border: 1px solid #44546a;
+            vertical-align: middle;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .excel-cell {
+            padding: 6px 4px;
+            border: 1px solid #ddd;
+            text-align: center;
+            color: #000000;
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        .excel-even {
+            background: #ffffff;
+        }
+
+        .excel-odd {
+            background: #f9f9f9;
+        }
+
+        .excel-cell.number {
+            font-family: 'Calibri', 'Courier New', monospace !important;
+            font-weight: bold;
+        }
+
+        .excel-cell.percentage {
+            font-weight: bold;
+        }
+
+        .excel-won {
+            background: rgba(46, 204, 113, 0.2) !important;
+        }
+
+        .excel-lost {
+            background: rgba(231, 76, 60, 0.1) !important;
+        }
+
+        .excel-summary-1 {
+            background: #d9e1f2 !important;
+            font-weight: bold;
+            font-size: 13px;
+            padding: 12px 4px !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            border-top: 2px solid #44546a !important;
+            height: 40px !important;
+        }
+
+        .excel-summary-1 td {
+            padding: 12px 4px !important;
+            border: 1px solid #44546a;
+            font-size: 13px;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            font-weight: bold;
+            color: #000000 !important;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            text-align: left !important;
+            padding-left: 10px !important;
+            color: #000000 !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        .summary-value {
+            font-weight: bold;
+            color: #000000 !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        .summary-dash {
+            color: #000000 !important;
+            font-weight: bold;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        .excel-summary-2 {
+            background: #fff9c4 !important;
+            font-weight: bold;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        .excel-summary-2 td {
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            font-weight: bold;
+            border: 1px solid #44546a;
+        }
+
+        .target-label {
+            text-align: center !important;
+            vertical-align: middle !important;
+            padding: 10px 4px !important;
+            font-weight: bold;
+            color: #ff0000 !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            background: #fff9c4 !important;
+            border: 1px solid #44546a !important;
+        }
+
+        .target-calc {
+            background: #d3d3d3 !important;
+            color: #e74c3c !important;
+            font-weight: bold;
+            text-align: center !important;
+            vertical-align: middle !important;
+            padding: 10px 4px !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            border: 1px solid #44546a !important;
+        }
+
+        .target-final {
+            background: #d3d3d3 !important;
+            color: #27ae60 !important;
+            font-weight: bold;
+            font-size: 13px;
+            text-align: center !important;
+            vertical-align: middle !important;
+            padding: 10px 4px !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            border: 1px solid #44546a !important;
+        }
+
+        .warning-text {
+            text-align: center !important;
+            color: #e74c3c !important;
+            font-weight: bold;
+            padding: 10px !important;
+            font-family: 'Cavolini', 'Segoe UI', Arial, sans-serif !important;
+            border: 1px solid #44546a !important;
+        }
+
+        .percentage-positive {
+            color: #27ae60 !important;
+            font-weight: bold;
+        }
+
+        .percentage-negative {
+            color: #e74c3c !important;
+            font-weight: bold;
+        }
+
+        .percentage-neutral {
+            color: #7f8c8d !important;
+        }
+
+        @media (max-width: 768px) {
+            .excel-table {
+                font-size: 11px;
+                min-width: 1000px;
+            }
+            
+            .excel-subheader th {
+                font-size: 10px;
+                padding: 6px 2px;
+            }
+            
+            .excel-cell {
+                padding: 4px 2px;
+            }
+            
+            .excel-summary-1 td,
+            .excel-summary-2 td {
+                padding: 8px 2px !important;
+                font-size: 11px;
+            }
+            
+            .target-label,
+            .target-calc,
+            .target-final {
+                padding: 8px 2px !important;
+            }
+        }
+
+        /* ==================== EXCEL KLASSEMENT STIJL (VBA MACRO) ==================== */
+        .excel-klassement-container {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .klassement-title {
+            background: #4472c4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #44546a;
+        }
+
+        .klassement-title h1 {
+            margin: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif !important;
+            font-size: 24px !important;
+            color: #0078d4 !important;
+            font-weight: normal;
+        }
+
+        .klassement-wrapper {
+            overflow-x: auto;
+        }
+
+        .klassement-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+        }
+
+        .klassement-table tr:nth-child(1) {
+            background: #4472c4 !important;
+            height: 37.5px !important;
+        }
+
+        .klassement-table tr:nth-child(2) th {
+            background: #4472c4 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #44546a;
+            font-size: 12px;
+        }
+
+        .klassement-table tr:nth-child(2) th.naam-header {
+            text-align: center;
+            vertical-align: bottom;
+            background: #4472c4 !important;
+        }
+
+        .klassement-table tr:nth-child(3) th {
+            background: #4472c4 !important;
+            color: white;
+            text-align: center;
+            border: 1px solid #44546a;
+            font-size: 11px;
+            padding: 4px 2px;
+        }
+
+        .klassement-table tr:nth-child(3) th.datum-header {
+            background: #4472c4 !important;
+            color: white;
+            text-align: center;
+            font-size: 11px;
+            border: 1px solid #44546a;
+        }
+
+        .klassement-table tr:nth-child(3) th.totaal-column {
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            text-align: center;
+            vertical-align: middle;
+            width: 24px !important;
+            background: #4472c4 !important;
+            color: #0078d4 !important;
+            font-weight: bold;
+            border: 1px solid #44546a;
+        }
+
+        .klassement-table tr:nth-child(3) th.final-total-column {
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            text-align: center;
+            vertical-align: middle;
+            width: 33px !important;
+            background: #4472c4 !important;
+            color: #0078d4 !important;
+            font-weight: bold;
+            border: 1px solid #44546a;
+        }
+
+        .klassement-table td.speler-naam {
+            font-weight: bold;
+            text-align: left;
+            padding: 8px 4px;
+            border: 1px solid #44546a;
+            background: white;
+            min-width: 140px;
+        }
+
+        .klassement-table td.match-punt {
+            text-align: center;
+            padding: 8px 2px;
+            border: 1px solid #44546a;
+            font-weight: bold;
+            min-width: 25px;
+            background: white;
+        }
+
+        .klassement-table td.tussentotaal {
+            text-align: center;
+            padding: 8px 2px;
+            border: 1px solid #44546a;
+            font-weight: bold;
+            background: #f4dbbc !important;
+            color: #0078d4 !important;
+            min-width: 20px;
+            font-size: 13px;
+        }
+
+        .klassement-table td.eindtotaal {
+            text-align: center;
+            padding: 8px 4px;
+            border: 1px solid #44546a;
+            font-weight: bold;
+            font-size: 14px;
+            color: #0078d4 !important;
+            background: #f4dbbc !important;
+            min-width: 33px;
+        }
+
+        .klassement-table tr:nth-child(n+4) td:nth-child(3n+3),
+        .klassement-table tr:nth-child(n+4) td:nth-child(3n+4),
+        .klassement-table tr:nth-child(n+4) td:nth-child(3n+5) {
+            background: #f4dbbc !important;
+        }
+
+        .klassement-table tr:nth-child(n+4) td.eindtotaal {
+            background: #f4dbbc !important;
+            color: #0078d4 !important;
+        }
+
+        .klassement-table td.tussentotaal::before {
+            content: "Σ";
+            font-size: 10px;
+            color: #666;
+            margin-right: 2px;
+        }
+
+        .klassement-table td.eindtotaal::before {
+            content: "∑";
+            font-size: 12px;
+            color: #0078d4;
+            margin-right: 4px;
+            font-weight: bold;
+        }
+
+        .klassement-table th.sortable {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .klassement-table th.sortable:hover {
+            background: #5b9bd5 !important;
+        }
+
+        .klassement-table th.sortable.asc::after {
+            content: " ▲";
+            font-size: 10px;
+            color: white;
+        }
+
+        .klassement-table th.sortable.desc::after {
+            content: " ▼";
+            font-size: 10px;
+            color: white;
+        }
+
+        .klassement-table th,
+        .klassement-table td {
+            border: 1px solid #44546a !important;
+        }
+
+        .klassement-table tr:nth-child(1) th,
+        .klassement-table tr:nth-child(2) th,
+        .klassement-table tr:nth-child(3) th {
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-color: #44546a !important;
+        }
+
+        @media (max-width: 768px) {
+            .klassement-table {
+                font-size: 11px;
+                min-width: 800px;
+            }
+            
+            .klassement-title h1 {
+                font-size: 18px !important;
+                padding: 10px;
+            }
+            
+            .klassement-table td.speler-naam {
+                min-width: 120px;
+                font-size: 12px;
+            }
+            
+            .klassement-table td.match-punt,
+            .klassement-table td.tussentotaal,
+            .klassement-table td.eindtotaal {
+                min-width: 20px;
+                padding: 4px 1px;
+                font-size: 11px;
+            }
+        }
+
+        @media print {
+            .klassement-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            
+            .klassement-table {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .klassement-title {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .klassement-title h1 {
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .klassement-table th,
+            .klassement-table td {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+                border-color: black !important;
+            }
+            
+            .klassement-table tr:nth-child(n+4) td:nth-child(3n+3),
+            .klassement-table tr:nth-child(n+4) td:nth-child(3n+4),
+            .klassement-table tr:nth-child(n+4) td:nth-child(3n+5),
+            .klassement-table td.eindtotaal {
+                background: #fff2cc !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+
+        /* ========== NIEUWE STIJLEN VOOR SPEELDAGEN BEHEER ========== */
+        .speeldagen-management-container {
+            padding: 20px;
+        }
+
+        .speeldagen-form-container {
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #e67e22;
+        }
+
+        .speeldagen-form-container h3 {
+            color: #e67e22;
+            margin-bottom: 20px;
+        }
+
+        .speeldagen-list-container {
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .speeldagen-list-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr auto;
+            gap: 15px;
+            padding: 15px;
+            background: #2c3e50;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .speeldag-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr auto;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .speeldag-row:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .speeldag-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .empty-speeldagen-message {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .date-full-format {
+            font-weight: bold;
+            color: #ecf0f1;
+        }
+
+        .speeldag-volgnummer {
+            background: #e67e22;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .tab-btn.speeldagen {
+            background: #2c3e50;
+        }
+
+        .tab-btn.speeldagen.active {
+            background: #e67e22;
+        }
+
+        .tab-btn.speeldagen:hover {
+            background: #d35400;
+        }
     </style>
 </head>
 <body id="bodyElement">
@@ -2686,32 +2590,7 @@
 	    </div>
 	</div>
     </div>
-	// STILLE BACKUP NA ELKE SCORE-INGAVE (geen wachttijd, geen melding)
-	function backupMatchSilently(matchData) {
-	  // 1. Opslaan in LocalStorage (werkt altijd, zelfs offline)
-	  localStorage.setItem('currentMatchBackup', JSON.stringify({
-	    matchData: matchData,
-	    timestamp: new Date().toISOString()
-	  }));
-	
-	  // 2. Asynchrone backup naar Google Sheets (alleen als internet beschikbaar is)
-	  if (navigator.onLine) {
-	    const BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec';
-	    
-	    fetch(BACKUP_URL, {
-	      method: 'POST',
-	      mode: 'no-cors', // Zorgt dat het niet blokkeert
-	      headers: { 'Content-Type': 'application/json' },
-	      body: JSON.stringify(matchData)
-	    }).catch(() => {
-	      // Fout negeren – lokale backup is al veilig
-	    });
-	  }
-	}
 
-
-
-	
     <script>
         // ==================== LOGIN FUNCTIES ====================
         const CLUB_PASSWORD = "Biljart8647";
@@ -2942,11 +2821,6 @@
                 }
                 
             }
-
-            
-
-
-            
 
             // NIEUWE FUNCTIE OM WIT/GEEL SCORES BIJ TE WERKEN
             function updateSideScoreDisplays() {
@@ -3559,6 +3433,29 @@ window.showPage = function(pageNum) {
                         statValue2.style.color = '';
                         statValue2.style.fontWeight = '';
                     }
+                }
+            }
+
+            // ===== STILLE BACKUP FUNCTIE =====
+            function backupMatchSilently(matchData) {
+                // 1. Opslaan in LocalStorage (werkt altijd, zelfs offline)
+                localStorage.setItem('currentMatchBackup', JSON.stringify({
+                    matchData: matchData,
+                    timestamp: new Date().toISOString()
+                }));
+
+                // 2. Asynchrone backup naar Google Sheets (alleen als internet beschikbaar is)
+                if (navigator.onLine) {
+                    const BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec';
+
+                    fetch(BACKUP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Zorgt dat het niet blokkeert
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(matchData)
+                    }).catch(() => {
+                        // Fout negeren – lokale backup is al veilig
+                    });
                 }
             }
 
@@ -5799,8 +5696,3 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 
 </body>
 </html>
-
-
-
-
-

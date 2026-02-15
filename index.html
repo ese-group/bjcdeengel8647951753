@@ -477,13 +477,19 @@
         }
 
         .confirm-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            flex-grow: 1;
-            max-width: 75%;        /* Iets smaller */
-            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-            transition: all 0.3s ease;
-        }
+		    background: linear-gradient(135deg, #e74c3c, #c0392b);
+		    color: white;
+		    width: 100%;
+		    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+		    transition: all 0.3s ease;
+		    border: none;
+		    border-radius: 10px;
+		    padding: 12px 20px;
+		    font-size: 1.1em;
+		    font-weight: bold;
+		    letter-spacing: 0.5px;
+		    cursor: pointer;
+		}
 
         .confirm-btn:hover {
             background: linear-gradient(135deg, #c0392b, #a93226);
@@ -496,13 +502,47 @@
             box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
         }
 
+		.undo-btn {
+		    width: 100%;
+		    background: #3498db;
+		    color: white;
+		    border: none;
+		    border-radius: 10px;
+		    padding: 12px 20px;
+		    font-size: 1.1em;
+		    font-weight: bold;
+		    letter-spacing: 0.5px;
+		    cursor: pointer;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+		}
+		
+		.undo-btn:hover {
+		    background: #2980b9;
+		    transform: translateY(-2px);
+		    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+		}
+		
+		.undo-btn:active {
+		    transform: translateY(1px);
+		    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+		}
+		
+		.undo-btn:disabled {
+		    background: #7f8c8d;
+		    cursor: not-allowed;
+		    transform: none;
+		    box-shadow: none;
+		}
+
         .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 5px 0 25px 0;
-            padding: 0 20px;
-        }
+		    display: flex;
+		    flex-direction: column;
+		    align-items: center;
+		    gap: 10px;
+		    margin: 5px 0 25px 0;
+		    padding: 0 20px;
+		}
 
         .match-ended {
             background: #27ae60;
@@ -2470,7 +2510,7 @@
             
             <div class="action-buttons">
                 <!-- UNDO KNOP (nu links) -->
-                <button class="action-btn" onclick="undoLastAdd()" id="undoBtn" disabled>↩️ Ongedaan maken</button>
+                <button class="action-btn undo-btn" onclick="undoLastAdd()" id="undoBtn" disabled>↩️ Einde beurt ongedaan maken</button>
                 <button class="action-btn confirm-btn" onclick="addScore()" id="confirmScoreBtn">
                     Einde beurt voor <span id="currentPlayerBtnName">Speler</span> en score toevoegen
                 </button>

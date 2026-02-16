@@ -4028,19 +4028,7 @@ function fixEncoding(text) {
 	        return speeldagen;
 	    }
 	    
-	    function excelDatumNaarDatum(excelNummer) {
-			const dagen = parseInt(excelNummer);
-			if (isNaN(dagen)) return null;
-			
-			// Excel start op 1 jan 1900 = serienummer 1
-			// Maar Excel behandelt 1900 foute als schrikkeljaar → corrigeer na 28 feb 1900
-			const offset = dagen >= 60 ? -2 : -1;
-			  
-			const basis = new Date(1900, 0, 1); // 1 jan 1900 (lokaal)
-			const ms = basis.getTime() + (dagen + offset) * 24 * 60 * 60 * 1000;
-			  
-			return new Date(ms);
-		}
+
 
             // ==================== LAAD SPELERS VAN GITHUB ====================
             async function loadPlayersFromGitHub() {

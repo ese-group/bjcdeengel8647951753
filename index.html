@@ -6003,14 +6003,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		  return true;
 		}
 		
-		window.refreshSpeeldagenFromGoogleSheet = async function() {
-		  if (confirm('Speeldagen herladen?')) {
-		    const success = await loadSpeeldagenFromGoogleSheet();
-		    if (success && state.currentMatchesTab === 'speeldagen') {
-		      loadSpeeldagenManagementTab();
-		    }
-		  }
-		}
+
 		
 		// KNOP-FUNCTIE VOOR UI
 		window.refreshSpeeldagenFromGoogleSheet = async function() {

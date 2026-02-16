@@ -5935,115 +5935,80 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ZELFSTANDIGE VERSIE
 		async function loadSpeeldagenFromGoogleSheet() {
-		  try {
-		    console.log('🔁 Laad speeldagen uit Google Sheet...');
-		    
-		    const SHEET_ID = '1YKOPBvj7SCfIVuUedoCAXNkeQ0NSrA0PGGfKdloMPs8';
-		    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Speeldagen`;
-		    
-		    const response = await fetch(url);
-		    if (!response.ok) {
-		      console.error('❌ HTTP-fout bij laden sheet:', response.status);
-		      return false;
-		    }
-		
-		    const csvText = await response.text();
-		    console.log('📄 CSV ontvangen (eerste 300 tekens):', csvText.substring(0, 300));
-		    
-		    const lines = csvText.split(/\r\n|\n/);
-		    console.log('📊 Aantal regels in CSV:', lines.length);
-		    
-		    const speeldagen = [];
-		    
-		    // LOKALE HELPER FUNCTIES
-		    function excelDatumNaarDatum(excelNummer) {
-		      const dagen = parseInt(excelNummer);
-		      if (isNaN(dagen)) return null;
-		      const offset = dagen >= 60 ? -2 : -1;
-		      const basis = new Date(1900, 0, 1);
-		      const ms = basis.getTime() + (dagen + offset) * 24 * 60 * 60 * 1000;
-		      return new Date(ms);
-		    }
-		    
-		    function formatDateForInput(date) {
-		      const d = new Date(date);
-		      const year = d.getFullYear();
-		      const month = String(d.getMonth() + 1).padStart(2, '0');
-		      const day = String(d.getDate()).padStart(2, '0');
-		      return `${year}-${month}-${day}`;
-		    }
-		    
-		    function formatDateFull(dateStr) {
-		      if (!dateStr) return '';
-		      const date = new Date(dateStr);
-		      if (isNaN(date.getTime())) return dateStr;
-		      const dagen = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
-		      const maanden = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
-		      const dagNaam = dagen[date.getDay()];
-		      const dag = date.getDate();
-		      const maand = maanden[date.getMonth()];
-		      const jaar = date.getFullYear();
-		      return `${dagNaam} ${dag} ${maand} ${jaar}`;
-		    }
-		    
-		    function cleanValue(val) {
-		      return val ? val.replace(/^"|"$/g, '').trim() : '';
-		    }
-		    
-		    // Skip koptekst (regel 0)
-		    for (let i = 1; i < lines.length; i++) {
-		      const line = lines[i].trim();
-		      if (!line || line === '""' || line === '"') continue;
-		      
-		      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(cleanValue);
-		      
-		      if (parts.length >= 2) {
-		        const volgnummer = parts[0];
-		        const excelDatum = parts[1];
-		        
-		        if (volgnummer && excelDatum && !isNaN(parseInt(volgnummer)) && !isNaN(parseInt(excelDatum))) {
-		          const jsDatum = excelDatumNaarDatum(excelDatum);
-		          if (jsDatum) {
-		            speeldagen.push({
-		              volgnummer: parseInt(volgnummer),
-		              excelDatum: parseInt(excelDatum),
-		              jsDatum: jsDatum,
-		              displayDatum: formatDateForInput(jsDatum),
-		              fullDate: formatDateFull(formatDateForInput(jsDatum))
-		            });
-		            console.log(`✅ Speeldag ${volgnummer} toegevoegd: ${formatDateFull(formatDateForInput(jsDatum))}`);
-		          }
-		        } else {
-		          console.warn(`⚠️ Regel ${i} genegeerd (ongeldige data): "${volgnummer}", "${excelDatum}"`);
+		  const SHEET_ID = '1YKOPBvj7SCfIVuUedoCAXNkeQ0NSrA0PGGfKdloMPs8';
+		  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Speeldagen`;
+		  
+		  const response = await fetch(url);
+		  const csvText = await response.text();
+		  const lines = csvText.split(/\r\n|\n/);
+		  const speeldagen = [];
+		  
+		  function excelDatumNaarDatum(excelNummer) {
+		    const dagen = parseInt(excelNummer);
+		    if (isNaN(dagen)) return null;
+		    const offset = dagen >= 60 ? -2 : -1;
+		    const basis = new Date(1900, 0, 1);
+		    const ms = basis.getTime() + (dagen + offset) * 24 * 60 * 60 * 1000;
+		    return new Date(ms);
+		  }
+		  
+		  function formatDateForInput(date) {
+		    const d = new Date(date);
+		    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+		  }
+		  
+		  function formatDateFull(dateStr) {
+		    const date = new Date(dateStr);
+		    if (isNaN(date.getTime())) return dateStr;
+		    const dagen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+		    const maanden = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+		    return `${dagen[date.getDay()]} ${date.getDate()} ${maanden[date.getMonth()]} ${date.getFullYear()}`;
+		  }
+		  
+		  function cleanValue(val) {
+		    return val ? val.replace(/^"|"$/g, '').trim() : '';
+		  }
+		  
+		  for (let i = 1; i < lines.length; i++) {
+		    const line = lines[i].trim();
+		    if (!line || line === '""') continue;
+		    const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(cleanValue);
+		    if (parts.length >= 2) {
+		      const volgnummer = parts[0];
+		      const excelDatum = parts[1];
+		      if (volgnummer && excelDatum && !isNaN(parseInt(volgnummer)) && !isNaN(parseInt(excelDatum))) {
+		        const jsDatum = excelDatumNaarDatum(excelDatum);
+		        if (jsDatum) {
+		          speeldagen.push({
+		            volgnummer: parseInt(volgnummer),
+		            excelDatum: parseInt(excelDatum),
+		            jsDatum: jsDatum,
+		            displayDatum: formatDateForInput(jsDatum),
+		            fullDate: formatDateFull(formatDateForInput(jsDatum))
+		          });
 		        }
 		      }
 		    }
-		    
-		    if (speeldagen.length === 0) {
-		      console.error('❌ Geen geldige speeldagen gevonden in CSV!');
-		      console.error('Volledige CSV:', csvText);
-		      alert('❌ Geen geldige speeldagen gevonden.\nControleer kolom B: moet Excel-nummer zijn (bijv. 46133)');
-		      return false;
-		    }
-		    
-		    speeldagen.sort((a, b) => a.volgnummer - b.volgnummer);
-		    console.log(`✅ ${speeldagen.length} speeldagen succesvol geladen`);
-		    
-		    // OPSLAAN IN STATE + LOCALSTORAGE (zonder saveStateToStorage)
-		    state.speeldagen = speeldagen;
-		    try {
-		      localStorage.setItem('biljartState', JSON.stringify(state));
-		    } catch (e) {
-		      console.warn('⚠️ Kon state niet opslaan in localStorage:', e.message);
-		    }
-		    
-		    alert(`✅ ${speeldagen.length} speeldagen geladen van Google Sheet!`);
-		    return true;
-		    
-		  } catch (error) {
-		    console.error('❌ Fout bij laden speeldagen:', error);
-		    alert(`Fout bij laden speeldagen:\n${error.message}`);
+		  }
+		  
+		  if (speeldagen.length === 0) {
+		    alert('❌ Geen geldige speeldagen gevonden.');
 		    return false;
+		  }
+		  
+		  speeldagen.sort((a, b) => a.volgnummer - b.volgnummer);
+		  state.speeldagen = speeldagen;
+		  localStorage.setItem('biljartState', JSON.stringify(state));
+		  alert(`✅ ${speeldagen.length} speeldagen geladen!`);
+		  return true;
+		}
+		
+		window.refreshSpeeldagenFromGoogleSheet = async function() {
+		  if (confirm('Speeldagen herladen?')) {
+		    const success = await loadSpeeldagenFromGoogleSheet();
+		    if (success && state.currentMatchesTab === 'speeldagen') {
+		      loadSpeeldagenManagementTab();
+		    }
 		  }
 		}
 		

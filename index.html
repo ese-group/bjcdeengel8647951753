@@ -3672,23 +3672,22 @@ window.showPage = function(pageNum) {
                     state.currentMatch.p1Highest = state.player1.highestSeries;
                     state.currentMatch.p2Highest = state.player2.highestSeries;
                 } else {
-                    // WEL wisseling: speler 2 speelde met wit
-                    if (state.firstToTarget === 1) {
-                        winner = originalP2;
-                        winnaarInfo = `${originalP2} bereikte als eerste zijn target. ${originalP1} kreeg nog één nabeurt.`;
-                    } else if (state.firstToTarget === 2) {
-                        winner = originalP1;
-                        winnaarInfo = `${originalP1} bereikte als eerste zijn target. ${originalP2} kreeg geen nabeurt.`;
-                    }
-                    
-                    state.currentMatch.p1Score = state.player2.score;
-                    state.currentMatch.p2Score = state.player1.score;
-                    
-                    state.currentMatch.p1Turns = [...state.player2.turns];
-                    state.currentMatch.p2Turns = [...state.player1.turns];
-                    state.currentMatch.p1Highest = state.player2.highestSeries;
-                    state.currentMatch.p2Highest = state.player1.highestSeries;
-                }
+				  // WEL wisseling: speler 2 speelde met wit
+				  if (state.firstToTarget === 1) {
+				    winner = originalP2;
+				    winnaarInfo = `${originalP2} bereikte als eerste zijn target. ${originalP1} kreeg nog één nabeurt.`;
+				  } else if (state.firstToTarget === 2) {
+				    winner = originalP1;
+				    winnaarInfo = `${originalP1} bereikte als eerste zijn target. ${originalP2} kreeg geen nabeurt.`;
+				  }
+				  // ✅ CORRECT: Geen extra wissel — state.player1 = wit (p1), state.player2 = geel (p2)
+				  state.currentMatch.p1Score = state.player1.score;
+				  state.currentMatch.p2Score = state.player2.score;
+				  state.currentMatch.p1Turns = [...state.player1.turns];
+				  state.currentMatch.p2Turns = [...state.player2.turns];
+				  state.currentMatch.p1Highest = state.player1.highestSeries;
+				  state.currentMatch.p2Highest = state.player2.highestSeries;
+				}
                 
                 state.currentMatch.winner = winner;
                 

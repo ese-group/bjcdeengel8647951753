@@ -4099,22 +4099,22 @@ function fixEncoding(text) {
 			      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
 			      
 			      if (parts.length >= 3) {
-			        // ✅ CORRECTE VOLGORDE:
-			        const name = parts[0].trim().replace(/^"(.*)"$/, '$1'); // Kolom A: Naam
-			        const targetRaw = parts[1].trim().replace(/^"(.*)"$/, '$1'); // Kolom B: Target (GETAL)
-			        const tsgRaw = parts[2].trim().replace(/^"(.*)"$/, '$1');   // Kolom C: TSG (TEKST)
-			        
-			        if (!name) continue;
-			        
-			        // Parse target als getal, fallback naar 50
-			        const targetNum = parseInt(targetRaw) || 50;
-			        
-			        players.push({
-			          name: name,
-			          tsg: tsgRaw || '0,000', // TSG blijft STRING (bijv. "4,864")
-			          target: targetNum       // Target is GETAL
-			        });
-			      }
+					  let name = parts[0].trim().replace(/^"(.*)"$/, '$1');
+					  let targetRaw = parts[1].trim().replace(/^"(.*)"$/, '$1'); // ✅ Kolom B = Target (GETAL)
+					  let tsgRaw = parts[2].trim().replace(/^"(.*)"$/, '$1');    // ✅ Kolom C = TSG (TEKST)
+					  
+					  // Controleer of naam bestaat
+					  if (!name) continue;
+					  
+					  // Parse target als getal, fallback naar 50
+					  const targetNum = parseInt(targetRaw) || 50;
+					  
+					  players.push({
+					    name: name,
+					    tsg: tsgRaw || '0,000', // TSG blijft STRING (bijv. "4,864")
+					    target: targetNum       // Target is GETAL
+					  });
+					}
 			    }
 			    
 			    if (players.length === 0) {

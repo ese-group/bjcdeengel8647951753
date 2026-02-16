@@ -5947,83 +5947,93 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (MET GID - BETROUWBAARDER)
+		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ROBUUSTE VERSIE
 		async function loadSpeeldagenFromGoogleSheet() {
 		  try {
 		    console.log('🔁 Laad speeldagen uit Google Sheet...');
 		    
 		    const SHEET_ID = '1YKOPBvj7SCfIVuUedoCAXNkeQ0NSrA0PGGfKdloMPs8';
-		    // 👇 GEBRUIK GID IN PLAATS VAN TABBLADNAAM (jouw gid = 821373037)
-		    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=821373037`;
+		    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Speeldagen`;
 		    
 		    const response = await fetch(url);
 		    if (!response.ok) {
-		      console.log('❌ Kon Google Sheet niet laden (HTTP ' + response.status + ')');
+		      console.error('❌ HTTP-fout bij laden sheet:', response.status);
 		      return false;
 		    }
 		
 		    const csvText = await response.text();
-		    console.log('📄 Eerste 200 tekens CSV:', csvText.substring(0, 200));
+		    console.log('📄 CSV ontvangen (eerste 300 tekens):', csvText.substring(0, 300));
 		    
 		    const lines = csvText.split(/\r\n|\n/);
-		    console.log('📊 Aantal regels:', lines.length);
+		    console.log('📊 Aantal regels in CSV:', lines.length);
 		    
 		    const speeldagen = [];
+		    
+		    // LOKALE HELPER FUNCTIE (geen scope-problemen!)
+		    function excelDatumNaarDatum(excelNummer) {
+		      const dagen = parseInt(excelNummer);
+		      if (isNaN(dagen)) return null;
+		      const offset = dagen >= 60 ? -2 : -1;
+		      const basis = new Date(1900, 0, 1);
+		      const ms = basis.getTime() + (dagen + offset) * 24 * 60 * 60 * 1000;
+		      return new Date(ms);
+		    }
+		    
+		    // VERWIJDER QUOTES EN PARSE VEILIG
+		    function cleanValue(val) {
+		      return val ? val.replace(/^"|"$/g, '').trim() : '';
+		    }
 		    
 		    // Skip koptekst (regel 0)
 		    for (let i = 1; i < lines.length; i++) {
 		      const line = lines[i].trim();
-		      if (!line || line === '"') continue;
+		      if (!line || line === '""' || line === '"') continue;
 		      
-		      // Splits op komma OF punt-komma (Google Sheets gebruikt soms ; in NL)
-		      let parts;
-		      if (line.includes(';')) {
-		        parts = line.split(';');
-		      } else {
-		        parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-		      }
+		      // Splits op komma MET quote-ondersteuning
+		      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(cleanValue);
 		      
 		      if (parts.length >= 2) {
-		        let volgnummer = parts[0]?.trim().replace(/^"(.*)"$/, '$1');
-		        let excelDatum = parts[1]?.trim().replace(/^"(.*)"$/, '$1');
-		        
-		        // Verwijder eventuele quotes en spaties
-		        volgnummer = volgnummer?.replace(/"/g, '').trim();
-		        excelDatum = excelDatum?.replace(/"/g, '').trim();
+		        const volgnummer = parts[0];
+		        const excelDatum = parts[1];
 		        
 		        if (volgnummer && excelDatum && !isNaN(parseInt(volgnummer)) && !isNaN(parseInt(excelDatum))) {
 		          const jsDatum = excelDatumNaarDatum(excelDatum);
-		          speeldagen.push({
-		            volgnummer: parseInt(volgnummer),
-		            excelDatum: parseInt(excelDatum),
-		            jsDatum: jsDatum,
-		            displayDatum: formatDateForInput(jsDatum),
-		            fullDate: formatDateFull(formatDateForInput(jsDatum))
-		          });
-		          console.log(`✅ Speeldag ${volgnummer}: Excel ${excelDatum} -> ${jsDatum}`);
+		          if (jsDatum) {
+		            speeldagen.push({
+		              volgnummer: parseInt(volgnummer),
+		              excelDatum: parseInt(excelDatum),
+		              jsDatum: jsDatum,
+		              displayDatum: formatDateForInput(jsDatum),
+		              fullDate: formatDateFull(formatDateForInput(jsDatum))
+		            });
+		            console.log(`✅ Speeldag ${volgnummer} toegevoegd: ${formatDateFull(formatDateForInput(jsDatum))}`);
+		          }
 		        } else {
-		          console.warn(`⚠️ Regel ${i} genegeerd: volgnummer="${volgnummer}", excelDatum="${excelDatum}"`);
+		          console.warn(`⚠️ Regel ${i} genegeerd (ongeldige data): "${volgnummer}", "${excelDatum}"`);
 		        }
 		      }
 		    }
 		    
 		    if (speeldagen.length === 0) {
-		      console.error('❌ Geen geldige speeldagen gevonden');
-		      console.error('CSV inhoud:', csvText);
+		      console.error('❌ Geen geldige speeldagen gevonden in CSV!');
+		      console.error('Volledige CSV (eerste 500 tekens):', csvText.substring(0, 500));
 		      return false;
 		    }
 		    
 		    speeldagen.sort((a, b) => a.volgnummer - b.volgnummer);
-		    console.log(`✅ ${speeldagen.length} speeldagen geladen`);
+		    console.log(`✅ ${speeldagen.length} speeldagen succesvol geladen`);
 		    
 		    state.speeldagen = speeldagen;
 		    saveStateToStorage();
 		    return true;
 		    
 		  } catch (error) {
-		    console.error('❌ Fout bij laden speeldagen:', error);
+		    console.error('❌ Fout bij laden speeldagen uit Google Sheet:', error);
+		    alert(`Fout bij laden speeldagen:\n${error.message}\n\nControleer:\n1. Tabblad "Speeldagen" bestaat\n2. Kolom A = Volgnummer, Kolom B = Excel-datum (bijv. 46133)\n3. Sheet is GEPUBLICEERD`);
 		    return false;
 		  }
 		}
+		
 		// KNOP-FUNCTIE VOOR UI
 		window.refreshSpeeldagenFromGoogleSheet = async function() {
 		  if (confirm('Speeldagen herladen van Google Sheet?\nLokale wijzigingen gaan verloren.')) {
@@ -6033,18 +6043,9 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		      if (state.currentMatchesTab === 'speeldagen') {
 		        loadSpeeldagenManagementTab();
 		      }
-		    } else {
-		      alert('❌ Kon speeldagen niet laden.\n\nControleer:\n1. Tabblad "Speeldagen" bestaat\n2. Sheet is GEPUBLICEERD (Bestand → Publiceren op web)\n3. Kolom A = Volgnummer, Kolom B = Excel-datum (bijv. 46133)');
 		    }
 		  }
 		}
-		    
-
-
-
-
-
-
 
 		
     </script>

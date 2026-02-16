@@ -135,11 +135,35 @@ function berekenExactMacroKlassement() {
         });
         
         spelerMatches.forEach(match => {
-            if (puntenPerDatum[match.date]) {
-                const isWinnaar = match.winner === spelerNaam;
-                const matchpunten = isWinnaar ? 2 : 1;
-                puntenPerDatum[match.date].push(matchpunten);
+          if (puntenPerDatum[match.date]) {
+            // Bepaal of speler originalP1 of originalP2 was
+            const isOriginalP1 = match.originalP1 === spelerNaam;
+            
+            // Haal score en beurten op voor deze speler
+            const score = isOriginalP1 ? (match.p1Score || 0) : (match.p2Score || 0);
+            const turnsArray = isOriginalP1 ? match.p1Turns : match.p2Turns;
+            const turnsCount = turnsArray ? turnsArray.length : 0;
+            
+            // Bereken gespeeld gemiddelde (veilig tegen deling door nul)
+            const gespeeldGemiddelde = turnsCount > 0 ? (score / turnsCount) : 0;
+            
+            // Haal TSG op uit huidige spelerslijst (converteer komma naar punt)
+            const spelerData = players.find(p => p.name === spelerNaam);
+            const tsg = spelerData?.tsg ? parseFloat(spelerData.tsg.replace(',', '.')) : 0;
+            
+            // Bepaal winst/verlies
+            const isWinnaar = match.winner === spelerNaam;
+            
+            // 🎯 BEREKEN MATCHPUNTEN VOLGENS DE JUISTE REGELS
+            let matchpunten;
+            if (isWinnaar) {
+              matchpunten = (gespeeldGemiddelde >= tsg) ? 4 : 2;
+            } else {
+              matchpunten = (gespeeldGemiddelde >= tsg) ? 3 : 1;
             }
+            
+            puntenPerDatum[match.date].push(matchpunten);
+          }
         });
         
         // Bereken tussentotalen

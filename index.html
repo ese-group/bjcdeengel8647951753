@@ -6010,7 +6010,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		  if (confirm('Speeldagen herladen van Google Sheet?\nLokale wijzigingen gaan verloren.')) {
 		    const success = await loadSpeeldagenFromGoogleSheet();
 		    if (success && state.currentMatchesTab === 'speeldagen') {
-		      loadSpeeldagenManagementTab();
+		      window.loadSpeeldagenManagementTab();
 		    }
 		  }
 		}

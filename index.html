@@ -5960,6 +5960,12 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		      console.log('❌ Kon Google Sheet niet laden');
 		      return false;
 		    }
+
+			const csvText = await response.text();
+		    console.log('📄 CSV-data ontvangen:', csvText); // 👈 DEBUG REGEL
+		    
+		    const lines = csvText.split(/\r\n|\n/);
+		    console.log('📊 Aantal regels:', lines.length); // 👈 DEBUG REGEL
 		    
 		    const csvText = await response.text();
 		    const lines = csvText.split(/\r\n|\n/);

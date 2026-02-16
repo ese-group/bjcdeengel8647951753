@@ -5936,6 +5936,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (MET GID - BETROUWBAARDER)
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ROBUUSTE VERSIE
+		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ZELFSTANDIGE VERSIE
 		async function loadSpeeldagenFromGoogleSheet() {
 		  try {
 		    console.log('🔁 Laad speeldagen uit Google Sheet...');
@@ -5957,7 +5958,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		    
 		    const speeldagen = [];
 		    
-		    // LOKALE HELPER FUNCTIE (geen scope-problemen!)
+		    // LOKALE HELPER FUNCTIES (geen scope-problemen!)
 		    function excelDatumNaarDatum(excelNummer) {
 		      const dagen = parseInt(excelNummer);
 		      if (isNaN(dagen)) return null;
@@ -5967,7 +5968,27 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		      return new Date(ms);
 		    }
 		    
-		    // VERWIJDER QUOTES EN PARSE VEILIG
+		    function formatDateForInput(date) {
+		      const d = new Date(date);
+		      const year = d.getFullYear();
+		      const month = String(d.getMonth() + 1).padStart(2, '0');
+		      const day = String(d.getDate()).padStart(2, '0');
+		      return `${year}-${month}-${day}`;
+		    }
+		    
+		    function formatDateFull(dateStr) {
+		      if (!dateStr) return '';
+		      const date = new Date(dateStr);
+		      if (isNaN(date.getTime())) return dateStr;
+		      const dagen = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+		      const maanden = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+		      const dagNaam = dagen[date.getDay()];
+		      const dag = date.getDate();
+		      const maand = maanden[date.getMonth()];
+		      const jaar = date.getFullYear();
+		      return `${dagNaam} ${dag} ${maand} ${jaar}`;
+		    }
+		    
 		    function cleanValue(val) {
 		      return val ? val.replace(/^"|"$/g, '').trim() : '';
 		    }
@@ -5977,7 +5998,6 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		      const line = lines[i].trim();
 		      if (!line || line === '""' || line === '"') continue;
 		      
-		      // Splits op komma MET quote-ondersteuning
 		      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(cleanValue);
 		      
 		      if (parts.length >= 2) {
@@ -6004,7 +6024,8 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		    
 		    if (speeldagen.length === 0) {
 		      console.error('❌ Geen geldige speeldagen gevonden in CSV!');
-		      console.error('Volledige CSV (eerste 500 tekens):', csvText.substring(0, 500));
+		      console.error('Volledige CSV:', csvText);
+		      alert('❌ Geen geldige speeldagen gevonden.\nControleer kolom B: moet Excel-nummer zijn (bijv. 46133)');
 		      return false;
 		    }
 		    
@@ -6013,11 +6034,12 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		    
 		    state.speeldagen = speeldagen;
 		    saveStateToStorage();
+		    alert(`✅ ${speeldagen.length} speeldagen geladen van Google Sheet!`);
 		    return true;
 		    
 		  } catch (error) {
-		    console.error('❌ Fout bij laden speeldagen uit Google Sheet:', error);
-		    alert(`Fout bij laden speeldagen:\n${error.message}\n\nControleer:\n1. Tabblad "Speeldagen" bestaat\n2. Kolom A = Volgnummer, Kolom B = Excel-datum (bijv. 46133)\n3. Sheet is GEPUBLICEERD`);
+		    console.error('❌ Fout bij laden speeldagen:', error);
+		    alert(`Fout bij laden speeldagen:\n${error.message}`);
 		    return false;
 		  }
 		}
@@ -6026,11 +6048,8 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		window.refreshSpeeldagenFromGoogleSheet = async function() {
 		  if (confirm('Speeldagen herladen van Google Sheet?\nLokale wijzigingen gaan verloren.')) {
 		    const success = await loadSpeeldagenFromGoogleSheet();
-		    if (success) {
-		      alert(`✅ ${state.speeldagen.length} speeldagen geladen van Google Sheet!`);
-		      if (state.currentMatchesTab === 'speeldagen') {
-		        loadSpeeldagenManagementTab();
-		      }
+		    if (success && state.currentMatchesTab === 'speeldagen') {
+		      loadSpeeldagenManagementTab();
 		    }
 		  }
 		}

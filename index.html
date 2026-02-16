@@ -5106,7 +5106,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
             }
 
             // ==================== NIEUWE FUNCTIES VOOR SPEELDAGEN BEHEER ====================
-            function loadSpeeldagenManagementTab() {
+            window.loadSpeeldagenManagementTab = function() {
                 const container = document.getElementById('tabContentSpeeldagen');
                 
                 updateSpeeldagenBadge();

@@ -5933,9 +5933,6 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
         }
 
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
-		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
-		// LAAD SPEELDATEN UIT GOOGLE SHEETS (MET GID - BETROUWBAARDER)
-		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ROBUUSTE VERSIE
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN") - ZELFSTANDIGE VERSIE
 		async function loadSpeeldagenFromGoogleSheet() {
 		  try {
@@ -5958,7 +5955,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		    
 		    const speeldagen = [];
 		    
-		    // LOKALE HELPER FUNCTIES (geen scope-problemen!)
+		    // LOKALE HELPER FUNCTIES
 		    function excelDatumNaarDatum(excelNummer) {
 		      const dagen = parseInt(excelNummer);
 		      if (isNaN(dagen)) return null;
@@ -6032,8 +6029,14 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		    speeldagen.sort((a, b) => a.volgnummer - b.volgnummer);
 		    console.log(`✅ ${speeldagen.length} speeldagen succesvol geladen`);
 		    
+		    // OPSLAAN IN STATE + LOCALSTORAGE (zonder saveStateToStorage)
 		    state.speeldagen = speeldagen;
-		    saveStateToStorage();
+		    try {
+		      localStorage.setItem('biljartState', JSON.stringify(state));
+		    } catch (e) {
+		      console.warn('⚠️ Kon state niet opslaan in localStorage:', e.message);
+		    }
+		    
 		    alert(`✅ ${speeldagen.length} speeldagen geladen van Google Sheet!`);
 		    return true;
 		    

@@ -5945,30 +5945,30 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
         }
 
 		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
+		// LAAD SPEELDATEN UIT GOOGLE SHEETS (TABBLAD "SPEELDATEN")
 		async function loadSpeeldagenFromGoogleSheet() {
 		  try {
 		    console.log('🔁 Laad speeldagen uit Google Sheet...');
 		    
-		    // 🔑 JOUW GOOGLE SHEET ID
+		    // 🔑 JOUW GOOGLE SHEET ID (zonder spaties in de URL!)
 		    const SHEET_ID = '1YKOPBvj7SCfIVuUedoCAXNkeQ0NSrA0PGGfKdloMPs8';
 		    
-		    // URL om data uit tabblad "Speeldagen" te halen als CSV
+		    // URL ZONDER SPATIES (kritiek!)
 		    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Speeldagen`;
 		    
 		    const response = await fetch(url);
 		    if (!response.ok) {
-		      console.log('❌ Kon Google Sheet niet laden');
+		      console.log('❌ Kon Google Sheet niet laden (check of tabblad "Speeldagen" bestaat en GEPUBLICEERD is)');
 		      return false;
 		    }
-
-			const csvText = await response.text();
-		    console.log('📄 CSV-data ontvangen:', csvText); // 👈 DEBUG REGEL
-		    
-		    const lines = csvText.split(/\r\n|\n/);
-		    console.log('📊 Aantal regels:', lines.length); // 👈 DEBUG REGEL
-		    
+		
+		    // ✅ ALLEEN ÉÉN keer csvText declareren
 		    const csvText = await response.text();
+		    console.log('📄 CSV-data ontvangen:', csvText.substring(0, 100) + '...'); // Eerste 100 tekens tonen
+		    
 		    const lines = csvText.split(/\r\n|\n/);
+		    console.log('📊 Aantal regels:', lines.length);
+		    
 		    const speeldagen = [];
 		    
 		    // Skip koptekst (regel 0)
@@ -5980,11 +5980,10 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		      const parts = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
 		      
 		      if (parts.length >= 2) {
-		        let volgnummer = parts[0].trim().replace(/^"(.*)"$/, '$1');
-		        let excelDatum = parts[1].trim().replace(/^"(.*)"$/, '$1');
+		        let volgnummer = parts[0]?.trim().replace(/^"(.*)"$/, '$1');
+		        let excelDatum = parts[1]?.trim().replace(/^"(.*)"$/, '$1');
 		        
-		        // Controleer of beide waarden geldig zijn
-		        if (volgnummer && excelDatum && !isNaN(volgnummer) && !isNaN(excelDatum)) {
+		        if (volgnummer && excelDatum && !isNaN(parseInt(volgnummer)) && !isNaN(parseInt(excelDatum))) {
 		          const jsDatum = excelDatumNaarDatum(excelDatum);
 		          speeldagen.push({
 		            volgnummer: parseInt(volgnummer),
@@ -5993,47 +5992,48 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
 		            displayDatum: formatDateForInput(jsDatum),
 		            fullDate: formatDateFull(formatDateForInput(jsDatum))
 		          });
+		          console.log(`✅ Speeldag toegevoegd: ${volgnummer} -> ${jsDatum}`);
 		        }
 		      }
 		    }
 		    
 		    if (speeldagen.length === 0) {
 		      console.log('⚠️ Geen geldige speeldagen gevonden in Google Sheet');
+		      console.warn('Controleer:');
+		      console.warn('1. Bestaat tabblad "Speeldagen"?');
+		      console.warn('2. Is het GEPUBLICEERD? (Bestand → Publiceren op web)');
+		      console.warn('3. Kolom A = Volgnummer, Kolom B = Excel-datum (bijv. 46133)');
 		      return false;
 		    }
 		    
-		    // Sorteer op volgnummer
 		    speeldagen.sort((a, b) => a.volgnummer - b.volgnummer);
-		    
 		    console.log(`✅ ${speeldagen.length} speeldagen geladen uit Google Sheet`);
 		    
-		    // Opslaan in state
 		    state.speeldagen = speeldagen;
 		    saveStateToStorage();
-		    
 		    return true;
 		    
 		  } catch (error) {
-		    console.error('⚠️ Fout bij laden speeldagen uit Google Sheet:', error.message);
+		    console.error('⚠️ Fout bij laden speeldagen:', error.message);
 		    return false;
 		  }
 		}
 		
-		// KNOP-FUNCTIE VOOR UI - GLOBAAL BESCHIKBAAR MAKEN
+		// KNOP-FUNCTIE VOOR UI
 		window.refreshSpeeldagenFromGoogleSheet = async function() {
 		  if (confirm('Speeldagen herladen van Google Sheet?\nLokale wijzigingen gaan verloren.')) {
 		    const success = await loadSpeeldagenFromGoogleSheet();
 		    if (success) {
 		      alert(`✅ ${state.speeldagen.length} speeldagen geladen van Google Sheet!`);
-		      // Herlaad de speeldagen tab
 		      if (state.currentMatchesTab === 'speeldagen') {
 		        loadSpeeldagenManagementTab();
 		      }
 		    } else {
-		      alert('❌ Kon speeldagen niet laden van Google Sheet.\nControleer of het tabblad "Speeldagen" bestaat en toegankelijk is.');
+		      alert('❌ Kon speeldagen niet laden.\n\nControleer:\n1. Tabblad "Speeldagen" bestaat\n2. Sheet is GEPUBLICEERD (Bestand → Publiceren op web)\n3. Kolom A = Volgnummer, Kolom B = Excel-datum (bijv. 46133)');
 		    }
 		  }
 		}
+		    
 
 
 

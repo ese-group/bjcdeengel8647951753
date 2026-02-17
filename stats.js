@@ -449,7 +449,9 @@ function loadStatsPage() {
                 html += `
                     <div class="player-stats-card no-data-card">
                         <h3>${spelerNaam}</h3>
-                        <p class="no-data-text">Geen voltooide matches</p>
+                        <p class="no-data-text" style="color: #ff6b6b;">
+                            Geen voltooide matches
+                        </p>
                         <div class="stats-summary">
                             <p><strong>TSG:</strong> ${player.tsg || 'N/A'}</p>
                             <p><strong>Target:</strong> ${player.target || 'N/A'}</p>

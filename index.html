@@ -2476,7 +2476,7 @@
                 </div>
                 
                 <button id="startMatchBtn" class="start-match-btn disabled-btn" onclick="startMatch()" disabled>
-                    🎯 Start Match
+                    ⚪🟡🔴 Start Match
                 </button>
                 
                 <div class="info-box" style="margin-top: 20px;">
@@ -3042,7 +3042,7 @@ window.showPage = function(pageNum) {
                     <div class="match-card" onclick="selectMatch(${match.id})">
                         <h3>${match.p1} vs ${match.p2}</h3>
                         <p class="match-info">
-                            🎯 Punten: ${match.target1} - ${match.target2}<br>
+                            ⚪🟡🔴 Punten: ${match.target1} - ${match.target2}<br>
                             📅 Datum: ${formatDateDisplay(match.date)}
                         </p>
                     </div>
@@ -3485,7 +3485,7 @@ window.showPage = function(pageNum) {
                     
                     const dynamicDisplay = document.createElement('div');
                     dynamicDisplay.className = 'dynamic-needed';
-                    dynamicDisplay.innerHTML = `🎯 Nog ${dynamicNeeded} punt${dynamicNeeded !== 1 ? 'en' : ''} nodig`;
+                    dynamicDisplay.innerHTML = `⚪🟡🔴 Nog ${dynamicNeeded} punt${dynamicNeeded !== 1 ? 'en' : ''} nodig`;
                     
                     if (dynamicNeeded <= 3) {
                         dynamicDisplay.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a24)';
@@ -3854,7 +3854,7 @@ window.showPage = function(pageNum) {
                                 <div class="stat-value">${avg1}</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-icon">🎯</div>
+                                <div class="stat-icon">⚪🟡🔴</div>
                                 <div>Nog nodig:</div>
                                 <div class="stat-value" id="needed1">${needed1}</div>
                             </div>
@@ -3913,7 +3913,7 @@ window.showPage = function(pageNum) {
                                 <div class="stat-value">${avg2}</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-icon">🎯</div>
+                                <div class="stat-icon">⚪🟡🔴</div>
                                 <div>Nog nodig:</div>
                                 <div class="stat-value" id="needed2">${needed2}</div>
                             </div>
@@ -5494,7 +5494,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
                                     <span class="status-badge status-pending">In afwachting</span>
                                 </h3>
                                 <p class="match-info">
-                                    🎯 Doelpunten: ${match.target1} - ${match.target2}<br>
+                                    ⚪🟡🔴 Punten: ${match.target1} - ${match.target2}<br>
                                     📅 Datum: ${formatDateDisplay(match.date)}
                                 </p>
                                 <div class="match-actions">
@@ -5570,7 +5570,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
                                     <span class="status-badge status-completed">Voltooid</span>
                                 </h3>
                                 <p class="match-info">
-                                    🎯 Doelpunten: ${match.target1} - ${match.target2}<br>
+                                    ⚪🟡🔴 Punten: ${match.target1} - ${match.target2}<br>
                                     📊 Eindscore: ${match.p1Score || 0} - ${match.p2Score || 0}<br>
                                     🏆 Winnaar: ${winner}<br>
                                     📅 Datum: ${formatDateDisplay(match.date)}
@@ -5648,7 +5648,7 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
                                     <span class="status-badge status-downloaded">Gedownload</span>
                                 </h3>
                                 <p class="match-info">
-                                    🎯 Doelpunten: ${match.target1} - ${match.target2}<br>
+                                    ⚪🟡🔴 Punten: ${match.target1} - ${match.target2}<br>
                                     📊 Eindscore: ${match.p1Score || 0} - ${match.p2Score || 0}<br>
                                     🏆 Winnaar: ${winner}<br>
                                     📅 Datum: ${formatDateDisplay(match.date)}

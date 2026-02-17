@@ -2416,6 +2416,30 @@
 		    box-sizing: border-box;     /* Zorgt dat padding binnen de hoogte valt */
 		    line-height: 1;             /* Voorkomt extra ruimte */
 		}
+		.new-match-btn,
+		.download-btn {
+		    height: 44px;                /* Vaste hoogte voor beide */
+		    padding: 0 25px;             /* Alleen horizontale padding */
+		    display: inline-flex;        /* Flex voor centrering */
+		    align-items: center;         /* Verticaal centreren */
+		    justify-content: center;     /* Horizontaal centreren (indien nodig) */
+		    box-sizing: border-box;      /* Zorgt dat padding binnen de hoogte blijft */
+		    border: none;                /* Eventuele randen verwijderen */
+		    line-height: 1;              /* Voorkomt extra ruimte door line-height */
+		    font-size: 16px;             /* Zelfde lettergrootte */
+		    margin: 0;                   /* Geen extra marges */
+		}
+		
+		/* Als de knoppen een achtergrondkleur of borderradius hebben, behoud die dan */
+		.new-match-btn {
+		    background: #3498db;         /* Originele kleur */
+		    border-radius: 8px;
+		}
+		
+		.download-btn {
+		    background: #9b59b6;         /* Originele kleur */
+		    border-radius: 8px;
+		}
     </style>
 </head>
 <body id="bodyElement">

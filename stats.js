@@ -241,7 +241,7 @@ function loadRankingPage() {
                 <table style="width: ${totaleKolommen * 40 + 100}px; border-collapse: collapse; margin-bottom: 20px;">
                     <tr>
                         <td colspan="${totaleKolommen}" 
-                            style="height: 37.5px; background: #4472c4; color: #e06666; font-family: 'Comic Sans MS'; 
+                            style="height: 37.5px; background: #4472c4; color: #f4cccc; font-family: 'Comic Sans MS'; 
                                    font-size: 24px; font-weight: bold; text-align: center; vertical-align: middle; border: 1px solid #000000;">
                             Klassement Biljartclub SPORT & VERMAAK ${seizoen}
                         </td>

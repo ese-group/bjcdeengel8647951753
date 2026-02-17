@@ -641,6 +641,16 @@ function createExcelTableHTML(playerName, player, rows) {
     const maxHoogsteReeks = rows.reduce((max, row) => Math.max(max, row.hoogsteReeks), 0);
     const totaalMatchpunten = rows.reduce((sum, row) => sum + row.matchpunten, 0);
     
+    // TSG en Target van de speler (algemeen)
+    let tsgSpeler = '—';
+    if (player.tsg) {
+        const num = parseFloat(player.tsg.toString().replace(',', '.'));
+        if (!isNaN(num)) {
+            tsgSpeler = num.toFixed(2).replace('.', ',');
+        }
+    }
+    const targetSpeler = player.target || '—';
+    
     let html = `
         <div class="excel-table-container">
             <div class="table-header">
@@ -657,10 +667,10 @@ function createExcelTableHTML(playerName, player, rows) {
                             <th style="background: #f4dbbc; text-align: center;">${targetEersteZes}</th>
                             <th colspan="3" style="text-align: center; background: #c8e6c9; color: #000;">Te maken punten eerste 6 matchen</th>
                             <th style="background: #f4dbbc; text-align: center;">${tsgEersteZes}</th>
-                            <th style="background: #c8e6c9; text-align: center;">Gemiddelde</th>
-                            <th style="background: #ffcccc; text-align: center; color: #d00;">1,00</th>
-                            <th style="background: #c8e6c9; text-align: center;">Te maken punten</th>
-                            <th style="background: #ffcccc; text-align: center; color: #d00;">20</th>
+                            <th style="background: #c8e6c9; text-align: center;">Gemiddelde<br><span style="font-size:0.8em;">(TSG)</span></th>
+                            <th style="background: #ffcccc; text-align: center; color: #d00;">${tsgSpeler}</th>
+                            <th style="background: #c8e6c9; text-align: center;">Te maken punten<br><span style="font-size:0.8em;">(Target)</span></th>
+                            <th style="background: #ffcccc; text-align: center; color: #d00;">${targetSpeler}</th>
                             <th rowspan="2" style="background: #c8e6c9; vertical-align: middle; text-align: center;">Behaalde<br>matchpunten</th>
                         </tr>
                         
@@ -682,6 +692,7 @@ function createExcelTableHTML(playerName, player, rows) {
                             <th>%<br>Verloren</th>
                         </tr>
                     </thead>
+                    
                     
                     <tbody>
     `;

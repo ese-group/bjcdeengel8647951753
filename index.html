@@ -872,17 +872,34 @@
         }
         
         .player-select-box.selected {
-            background: #3498db;
-            border-color: #2980b9;
-        }
+		    background: linear-gradient(135deg, #1f4e79, #2e6da4);
+		    border: 2px solid #163a5c;
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+		    color: #ffffff;
+		    transition: all 0.2s ease-in-out;
+		}
+		
+		/* Hover effect (optioneel maar mooier) */
+		.player-select-box.selected:hover {
+		    background: linear-gradient(135deg, #255d91, #357ab8);
+		    transform: translateY(-1px);
+		}
         
         .player-select-box h3 {
-	    	background-color: rgba(255, 255, 255, 0.15);
+		    background-color: rgba(255, 255, 255, 0.18);
 		    display: inline-block;
-		    padding: 5px 15px;
-		    border-radius: 20px;
+		    padding: 6px 16px;
+		    border-radius: 999px;
 		    margin-top: 0;
-		    color: 	#a5d6a5
+		    margin-bottom: 0;
+		    
+		    /* Contrast font */
+		    color: #ffffff;
+		    font-weight: 600;
+		    letter-spacing: 0.3px;
+		    
+		    /* Subtle blur glass effect */
+		    backdrop-filter: blur(4px);
 		}
         
         .player-select-box p {

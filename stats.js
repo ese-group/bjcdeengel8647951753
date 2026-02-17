@@ -71,9 +71,22 @@ function getSeizoen() {
 }
 
 // ==================== EXACTE MACRO LOGICA ====================
+// ==================== EXACTE MACRO LOGICA ====================
 function berekenExactMacroKlassement() {
     const players = getPlayers();
     const matches = getMatches();
+    
+    // Maak een map van spelernaam naar numerieke TSG
+    const playerTsgMap = {};
+    players.forEach(p => {
+        if (p.name) {
+            let tsg = p.tsg;
+            if (typeof tsg === 'string') {
+                tsg = parseFloat(tsg.replace(',', '.'));
+            }
+            playerTsgMap[p.name] = tsg || 0; // fallback naar 0 indien onbekend
+        }
+    });
     
     // Haal speeldagen uit state (geïmporteerd via CSV)
     let speeldagenData = [];
@@ -137,7 +150,27 @@ function berekenExactMacroKlassement() {
         spelerMatches.forEach(match => {
             if (puntenPerDatum[match.date]) {
                 const isWinnaar = match.winner === spelerNaam;
-                const matchpunten = isWinnaar ? 2 : 1;
+                
+                // Bepaal de score van de speler in deze match
+                let spelerScore = 0;
+                if (match.p1 === spelerNaam) {
+                    spelerScore = match.p1Score || 0;
+                } else if (match.p2 === spelerNaam) {
+                    spelerScore = match.p2Score || 0;
+                }
+                
+                // Haal TSG van de speler op
+                const tsg = playerTsgMap[spelerNaam] || 0;
+                const scoreGehaald = spelerScore >= tsg;
+                
+                // Bepaal matchpunten volgens de regels
+                let matchpunten;
+                if (isWinnaar) {
+                    matchpunten = scoreGehaald ? 4 : 2;
+                } else {
+                    matchpunten = scoreGehaald ? 3 : 1;
+                }
+                
                 puntenPerDatum[match.date].push(matchpunten);
             }
         });

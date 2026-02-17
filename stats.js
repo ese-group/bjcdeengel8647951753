@@ -72,6 +72,7 @@ function getSeizoen() {
 
 // ==================== EXACTE MACRO LOGICA ====================
 // ==================== EXACTE MACRO LOGICA ====================
+// ==================== EXACTE MACRO LOGICA ====================
 function berekenExactMacroKlassement() {
     const players = getPlayers();
     const matches = getMatches();
@@ -151,24 +152,30 @@ function berekenExactMacroKlassement() {
             if (puntenPerDatum[match.date]) {
                 const isWinnaar = match.winner === spelerNaam;
                 
-                // Bepaal de score van de speler in deze match
+                // Bepaal de score en het aantal beurten van de speler in deze match
                 let spelerScore = 0;
+                let beurten = 0;
                 if (match.p1 === spelerNaam) {
                     spelerScore = match.p1Score || 0;
+                    beurten = match.p1Turns ? match.p1Turns.length : 0;
                 } else if (match.p2 === spelerNaam) {
                     spelerScore = match.p2Score || 0;
+                    beurten = match.p2Turns ? match.p2Turns.length : 0;
                 }
+                
+                // Bereken het gemiddelde van de speler in deze match
+                const gemiddelde = beurten > 0 ? spelerScore / beurten : 0;
                 
                 // Haal TSG van de speler op
                 const tsg = playerTsgMap[spelerNaam] || 0;
-                const scoreGehaald = spelerScore >= tsg;
+                const gemiddeldeGehaald = gemiddelde >= tsg;
                 
                 // Bepaal matchpunten volgens de regels
                 let matchpunten;
                 if (isWinnaar) {
-                    matchpunten = scoreGehaald ? 4 : 2;
+                    matchpunten = gemiddeldeGehaald ? 4 : 2;
                 } else {
-                    matchpunten = scoreGehaald ? 3 : 1;
+                    matchpunten = gemiddeldeGehaald ? 3 : 1;
                 }
                 
                 puntenPerDatum[match.date].push(matchpunten);
@@ -211,7 +218,6 @@ function berekenExactMacroKlassement() {
         spelersKlassement: gesorteerdeSpelers
     };
 }
-
 // ==================== EXACTE MACRO KLASSEMENT PAGINA ====================
 function loadRankingPage() {
     console.log('🏆 loadRankingPage() - Exacte Excel VBA Macro');

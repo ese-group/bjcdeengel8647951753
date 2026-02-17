@@ -3837,87 +3837,83 @@ window.showPage = function(pageNum) {
 			
 			// Herstel match van backup data
 			// Herstel match van backup data
-			function restoreMatchFromBackup(backupData) {
+			function restoreMatchFromBackup(backup) {
+			    // Gebruik de volledige data (uit backup.fullData of backup zelf)
+			    const data = backup.fullData || backup;
+			
 			    // Zoek of maak de match in state.matches
-			    let match = state.matches.find(m => m.id === backupData.matchId);
-			    
+			    let match = state.matches.find(m => m.id === data.matchId);
 			    if (!match) {
-			        // Match bestaat niet meer, maak een nieuwe aan
 			        const newId = state.matches.length > 0 ? Math.max(...state.matches.map(m => m.id)) + 1 : 1;
-			        
 			        match = {
 			            id: newId,
-			            date: backupData.date || new Date().toISOString().split('T')[0],
-			            p1: backupData.player1,
-			            p2: backupData.player2,
-			            target1: backupData.target1 || 50,
-			            target2: backupData.target2 || 50,
-			            completed: backupData.completed || false,
-			            whitePlayer: backupData.whitePlayer || 1,  // Bewaar voor CSV
-			            p1Score: backupData.p1Score || 0,
-			            p2Score: backupData.p2Score || 0,
-			            p1Turns: backupData.p1Turns || [],
-			            p2Turns: backupData.p2Turns || []
+			            date: data.date || new Date().toISOString().split('T')[0],
+			            p1: data.player1,
+			            p2: data.player2,
+			            target1: data.target1 || 50,
+			            target2: data.target2 || 50,
+			            completed: data.completed || false,
+			            whitePlayer: data.whitePlayer || 1,
+			            p1Score: data.p1Score || 0,
+			            p2Score: data.p2Score || 0,
+			            p1Turns: data.p1Turns || [],
+			            p2Turns: data.p2Turns || [],
+			            p1Highest: Math.max(...(data.p1Turns || []), 0),
+			            p2Highest: Math.max(...(data.p2Turns || []), 0)
 			        };
-			        
 			        state.matches.push(match);
 			    } else {
-			        // Update bestaande match
-			        match.p1Score = backupData.p1Score || 0;
-			        match.p2Score = backupData.p2Score || 0;
-			        match.p1Turns = backupData.p1Turns || [];
-			        match.p2Turns = backupData.p2Turns || [];
-			        match.completed = backupData.completed || false;
-			        // Houd de originele whitePlayer, maar overschrijf niet
+			        match.p1Score = data.p1Score || 0;
+			        match.p2Score = data.p2Score || 0;
+			        match.p1Turns = data.p1Turns || [];
+			        match.p2Turns = data.p2Turns || [];
+			        match.completed = data.completed || false;
+			        match.p1Highest = Math.max(...match.p1Turns, 0);
+			        match.p2Highest = Math.max(...match.p2Turns, 0);
 			    }
-			    
-			    // Sla op in storage
-			    saveStateToStorage();
-			    
-			    // Stel in als currentMatch
+			
 			    state.currentMatch = match;
-			    state.selectedWhitePlayer = match.whitePlayer; // Alleen voor de weergave, niet voor isWhite
-			    
-			    // Herstel speler states
+			    state.selectedWhitePlayer = match.whitePlayer;
+			
+			    // Herstel spelers (speler1 altijd wit, speler2 altijd geel in UI)
 			    state.player1 = {
 			        score: match.p1Score,
 			        turns: [...match.p1Turns],
 			        target: match.target1,
 			        beurtNummer: match.p1Turns.length + 1,
-			        highestSeries: Math.max(...match.p1Turns, 0),
-			        isWhite: true,  // 🔥 FORCEER: speler 1 is altijd wit in de UI
-			        fixedTSG: '−'
+			        highestSeries: match.p1Highest,
+			        isWhite: true,
+			        fixedTSG: data.player1TSG || '−'
 			    };
-			    
 			    state.player2 = {
 			        score: match.p2Score,
 			        turns: [...match.p2Turns],
 			        target: match.target2,
 			        beurtNummer: match.p2Turns.length + 1,
-			        highestSeries: Math.max(...match.p2Turns, 0),
-			        isWhite: false, // 🔥 speler 2 is altijd geel
-			        fixedTSG: '−'
+			        highestSeries: match.p2Highest,
+			        isWhite: false,
+			        fixedTSG: data.player2TSG || '−'
 			    };
-			    
-			    state.currentPlayer = backupData.currentPlayer || 1;
-			    state.turnNumber = backupData.turnNumber || Math.floor((state.player1.turns.length + state.player2.turns.length) / 2) + 1;
-			    state.isFirstPlayerInRound = backupData.isFirstPlayerInRound !== undefined ? backupData.isFirstPlayerInRound : true;
-			    state.firstToTarget = backupData.firstToTarget || null;
-			    state.isNabeurt = backupData.isNabeurt || false;
-			    state.matchEnded = backupData.completed || false;
+			
+			    // Gebruik opgeslagen currentPlayer
+			    state.currentPlayer = data.currentPlayer !== undefined ? data.currentPlayer : 1;
+			
+			    // 🔥 HERBERKEN turnNumber en isFirstPlayerInRound
+			    state.turnNumber = state.player2.turns.length + 1;        // aantal voltooide rondes + 1
+			    state.isFirstPlayerInRound = (state.currentPlayer === 1); // speler1 is altijd eerste van de ronde
+			
+			    state.firstToTarget = data.firstToTarget || null;
+			    state.isNabeurt = data.isNabeurt || false;
+			    state.matchEnded = data.completed || false;
 			    state.currentInput = 0;
-			    
-			    // Reset undo
+			
 			    lastStateBeforeAdd = null;
-			    
-			    // Ga naar pagina 5
-			    showPage(5);
-			    
-			    // Update de UI
+			
+			    // UI updaten
 			    document.getElementById('matchTitle').textContent = `${match.p1} ⚔️ ${match.p2}`;
 			    document.getElementById('player1ScoreName').textContent = match.p1;
 			    document.getElementById('player2ScoreName').textContent = match.p2;
-			    
+			
 			    if (state.matchEnded) {
 			        disableScoreButtons();
 			        document.getElementById('matchEndedAlert').style.display = 'block';
@@ -3925,10 +3921,11 @@ window.showPage = function(pageNum) {
 			        enableScoreButtons();
 			        document.getElementById('matchEndedAlert').style.display = 'none';
 			    }
-			    
+			
 			    updateSideScoreDisplays();
 			    updateScoringPage();
-			    
+			    showPage(5);
+			
 			    alert(`✅ Match hersteld!\n${match.p1} ⚔️ ${match.p2}\nScore: ${match.p1Score} - ${match.p2Score}`);
 			}
 			// Wijzig de backup functie om meer data op te slaan

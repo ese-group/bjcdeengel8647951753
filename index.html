@@ -3070,39 +3070,43 @@ window.showPage = function(pageNum) {
             }
 
             function displayAvailablePlayers() {
-                const container = document.getElementById('availablePlayers');
-                
-                if (state.players.length === 0) {
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 20px; color: #95a5a6;">
-                            <p>Geen spelers gevonden</p>
-                            <p><small>Spelers worden geladen van GitHub</small></p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                state.players.sort((a, b) => a.name.localeCompare(b.name));
-                
-                let html = '<h3 style="margin-bottom: 15px; color: #ecf0f1;">Beschikbare spelers:</h3>';
-                html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">';
-                
-                state.players.forEach((player, index) => {
-                    const isSelected = (state.newMatch.player1 && state.newMatch.player1.name === player.name) ||
-                                     (state.newMatch.player2 && state.newMatch.player2.name === player.name);
-                    
-                    html += `
-                        <div class="player-select-box ${isSelected ? 'selected' : ''}" 
-                             onclick="selectAvailablePlayer(${index})"
-                             style="${isSelected ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
-                            <h3>${player.name}</h3>
-                            <p>Gemiddelde: ${player.tsg || 'N/A'}</p>
-                            <p>Standaard target: ${player.target}</p>
-                            ${isSelected ? '<p style="color: #e74c3c; margin-top: 5px;">✓ Al geselecteerd</p>' : ''}
-                        </div>
-                    `;
-                });
-			}
+			    const container = document.getElementById('availablePlayers');
+			    
+			    if (state.players.length === 0) {
+			        container.innerHTML = `
+			            <div style="text-align: center; padding: 20px; color: #95a5a6;">
+			                <p>Geen spelers gevonden</p>
+			                <p><small>Spelers worden geladen van GitHub</small></p>
+			            </div>
+			        `;
+			        return;
+			    }
+			    
+			    state.players.sort((a, b) => a.name.localeCompare(b.name));
+			    
+			    let html = '<h3 style="margin-bottom: 15px; color: #ecf0f1;">Beschikbare spelers:</h3>';
+			    html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">';
+			    
+			    state.players.forEach((player, index) => {
+			        const isSelected = (state.newMatch.player1 && state.newMatch.player1.name === player.name) ||
+			                         (state.newMatch.player2 && state.newMatch.player2.name === player.name);
+			        
+			        html += `
+			            <div class="player-select-box ${isSelected ? 'selected' : ''}" 
+			                 onclick="selectAvailablePlayer(${index})"
+			                 style="${isSelected ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+			                <h3>${player.name}</h3>
+			                <p>Gemiddelde: ${player.tsg || 'N/A'}</p>
+			                <p>Standaard target: ${player.target}</p>
+			                ${isSelected ? '<p style="color: #e74c3c; margin-top: 5px;">✓ Al geselecteerd</p>' : ''}
+			            </div>
+			        `;
+			    }); // <-- sluit de forEach
+			    html += '</div>';
+			    container.innerHTML = html;
+			} // <-- sluit displayAvailablePlayers
+			
+			
 
             window.selectAvailablePlayer = function(playerIndex) {
                 if (playerIndex < 0 || playerIndex >= state.players.length) return;

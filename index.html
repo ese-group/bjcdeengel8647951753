@@ -3119,8 +3119,8 @@ window.showPage = function(pageNum) {
 			                 style="${isSelected ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
 			                <h3>${player.name}</h3>
 			                <p>Gemiddelde: ${player.tsg || 'N/A'}</p>
-			                <p>Standaard target: ${player.target}</p>
-			                ${isSelected ? '<p style="color: #2ecc71; margin-top: 6px;">✓ Al geselecteerd</p>' : ''}
+			                <p>Target: ${player.target}</p>
+			                ${isSelected ? '<p style="color: #2ecc71; margin-top: 6px;">✓ Geselecteerd</p>' : ''}
 			            </div>
 			        `;
 			    }); // <-- sluit de forEach
@@ -3152,7 +3152,7 @@ window.showPage = function(pageNum) {
                     document.getElementById('player1Name').textContent = player.name;
                     document.getElementById('player1Details').innerHTML = `
                         Gemiddelde: ${player.tsg || 'N/A'}<br>
-                        Standaard target: ${player.target}
+                        Target: ${player.target}
                     `;
                     document.getElementById('player1Target').value = player.target;
                     document.getElementById('player1Box').classList.add('selected');
@@ -3163,7 +3163,7 @@ window.showPage = function(pageNum) {
                     document.getElementById('player2Name').textContent = player.name;
                     document.getElementById('player2Details').innerHTML = `
                         Gemiddelde: ${player.tsg || 'N/A'}<br>
-                        Standaard target: ${player.target}
+                        Target: ${player.target}
                     `;
                     document.getElementById('player2Target').value = player.target;
                     document.getElementById('player2Box').classList.add('selected');

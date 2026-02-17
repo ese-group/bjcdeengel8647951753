@@ -791,6 +791,47 @@ function showSpelerDetail(spelerNaam) {
     const excelTable = generateExcelStylePlayerDetail(spelerNaam);
     
     document.getElementById('statsContent').innerHTML = `
+        <style>
+            .detail-header {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .ref-values {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-left: 0; /* links uitlijnen */
+            }
+            .ref-item {
+                background: #e9ecef;
+                padding: 4px 12px;
+                border-radius: 20px;
+                white-space: nowrap;
+                font-size: 14px;
+            }
+            .ref-label {
+                font-weight: 600;
+                margin-right: 5px;
+                color: #495057;
+            }
+            .ref-value {
+                font-weight: 700;
+                color: #0d6efd;
+            }
+            @media (max-width: 768px) {
+                .detail-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .ref-values {
+                    margin-left: 0;
+                    width: 100%;
+                }
+            }
+        </style>
         <div class="excel-detail-view">
             <div class="detail-header">
                 <button class="back-btn" onclick="loadStatsPage()">← Terug naar overzicht</button>

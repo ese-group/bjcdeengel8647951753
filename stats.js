@@ -865,6 +865,7 @@ function showSpelerDetail(spelerNaam) {
                 color: #495057;
             }
             .ref-value {
+                background: #e9ecef;
                 font-weight: 700;
                 color: #0d6efd;
             }

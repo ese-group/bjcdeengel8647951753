@@ -590,10 +590,11 @@ function generateExcelStylePlayerDetail(playerName) {
         const percGewonnen = (totaalGewonnen / aantalPartijen) * 100;
         const percVerloren = 100 - percGewonnen;
         
-        // Nieuwe matchpunten berekening
+        // Nieuwe matchpunten berekening op basis van gemiddelde
+        const gemiddeldeDezeMatch = gemiddeldePerPartij; // punten/beurten
         const tsgValue = parseFloat(player.tsg?.replace(',', '.') || 0);
-        const scoreGehaald = punten >= tsgValue;
-        const matchpunten = gewonnen ? (scoreGehaald ? 4 : 2) : (scoreGehaald ? 3 : 1);
+        const gemiddeldeGehaald = gemiddeldeDezeMatch >= tsgValue;
+        const matchpunten = gewonnen ? (gemiddeldeGehaald ? 4 : 2) : (gemiddeldeGehaald ? 3 : 1);
         
         resultRows.push({
             speeldag: Math.floor(index / 2) + 1,

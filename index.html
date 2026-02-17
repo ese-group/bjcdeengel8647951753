@@ -3660,6 +3660,284 @@ window.showPage = function(pageNum) {
                 }
             }
 
+
+			// Toon backup herstel modal
+			window.showBackupRecovery = function() {
+			    const modal = document.getElementById('backupRecoveryModal');
+			    modal.style.display = 'flex';
+			    loadAvailableBackups();
+			}
+			
+			// Sluit modal
+			window.closeBackupModal = function() {
+			    document.getElementById('backupRecoveryModal').style.display = 'none';
+			}
+			
+			// Laad beschikbare backups
+			async function loadAvailableBackups() {
+			    const source = document.getElementById('backupSourceSelect').value;
+			    const container = document.getElementById('backupListContainer');
+			    const restoreBtn = document.getElementById('restoreBackupBtn');
+			    
+			    restoreBtn.disabled = true;
+			    
+			    if (source === 'local') {
+			        // Laad lokale backup
+			        const localBackup = localStorage.getItem('currentMatchBackup');
+			        if (localBackup) {
+			            try {
+			                const backup = JSON.parse(localBackup);
+			                displayBackupList([backup]);
+			            } catch (e) {
+			                container.innerHTML = '<div style="color: #e74c3c; padding: 20px;">❌ Lokale backup is beschadigd</div>';
+			            }
+			        } else {
+			            container.innerHTML = '<div style="color: #95a5a6; padding: 20px;">📭 Geen lokale backup gevonden</div>';
+			        }
+			    } else {
+			        // Laad van Google Sheets
+			        container.innerHTML = '<div style="text-align: center; padding: 20px;">⏳ Backups laden van Google Sheets...</div>';
+			        
+			        try {
+			            const backups = await loadBackupsFromGoogleSheet();
+			            displayBackupList(backups);
+			        } catch (error) {
+			            container.innerHTML = `<div style="color: #e74c3c; padding: 20px;">❌ Fout bij laden: ${error.message}</div>`;
+			        }
+			    }
+			}
+			
+			// Toon lijst van backups
+			function displayBackupList(backups) {
+			    const container = document.getElementById('backupListContainer');
+			    const restoreBtn = document.getElementById('restoreBackupBtn');
+			    
+			    if (!backups || backups.length === 0) {
+			        container.innerHTML = '<div style="color: #95a5a6; padding: 20px;">📭 Geen backups gevonden</div>';
+			        return;
+			    }
+			    
+			    let html = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+			    
+			    backups.forEach((backup, index) => {
+			        const matchData = backup.matchData || backup;
+			        const date = new Date(backup.timestamp || Date.now());
+			        const dateStr = date.toLocaleString();
+			        
+			        html += `
+			            <div class="match-card" style="cursor: pointer; margin: 0;" onclick="selectBackup(${index})">
+			                <div style="display: flex; justify-content: space-between; align-items: center;">
+			                    <div>
+			                        <h3 style="margin: 0 0 5px 0;">${matchData.player1 || '?'} ⚔️ ${matchData.player2 || '?'}</h3>
+			                        <p style="margin: 0; font-size: 0.85em; color: #bdc3c7;">
+			                            📅 ${dateStr}<br>
+			                            🎯 Score: ${matchData.p1Score || 0} - ${matchData.p2Score || 0}
+			                        </p>
+			                    </div>
+			                    <div style="width: 20px; height: 20px; border: 2px solid #9b59b6; border-radius: 50%;" id="backupSelect_${index}"></div>
+			                </div>
+			            </div>
+			        `;
+			    });
+			    
+			    html += '</div>';
+			    container.innerHTML = html;
+			    
+			    // Sla backups op in een globale variabele voor later gebruik
+			    window.currentBackupList = backups;
+			}
+			
+			// Selecteer een backup
+			window.selectBackup = function(index) {
+			    // Deselecteer alle radios
+			    document.querySelectorAll('[id^="backupSelect_"]').forEach(el => {
+			        el.style.background = 'transparent';
+			    });
+			    
+			    // Selecteer de gekozen
+			    const selected = document.getElementById(`backupSelect_${index}`);
+			    if (selected) {
+			        selected.style.background = '#9b59b6';
+			    }
+			    
+			    // Sla geselecteerde index op
+			    window.selectedBackupIndex = index;
+			    
+			    // Activeer restore knop
+			    document.getElementById('restoreBackupBtn').disabled = false;
+			}
+			
+			// Herstel geselecteerde backup
+			window.restoreSelectedBackup = function() {
+			    if (window.selectedBackupIndex === undefined || !window.currentBackupList) return;
+			    
+			    const backup = window.currentBackupList[window.selectedBackupIndex];
+			    const matchData = backup.matchData || backup;
+			    
+			    if (!confirm('Weet je zeker dat je deze match wilt herstellen?\n\nDe huidige match gaat verloren als je niet hebt opgeslagen.')) {
+			        return;
+			    }
+			    
+			    // Herstel de match in de app
+			    restoreMatchFromBackup(matchData);
+			    
+			    // Sluit modal
+			    closeBackupModal();
+			}
+			
+			// Laad backups van Google Sheets
+			async function loadBackupsFromGoogleSheet() {
+			    // Dit hangt af van hoe je backups opslaat in Google Sheets
+			    // Je moet een endpoint hebben dat de laatste N backups teruggeeft
+			    
+			    const BACKUP_RETRIEVE_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec?action=getBackups';
+			    
+			    try {
+			        const response = await fetch(BACKUP_RETRIEVE_URL);
+			        const data = await response.json();
+			        return data.backups || [];
+			    } catch (error) {
+			        console.error('Fout bij laden Google Sheets backups:', error);
+			        throw error;
+			    }
+			}
+			
+			// Herstel match van backup data
+			function restoreMatchFromBackup(backupData) {
+			    // Zoek of maak de match in state.matches
+			    let match = state.matches.find(m => m.id === backupData.matchId);
+			    
+			    if (!match) {
+			        // Match bestaat niet meer, maak een nieuwe aan
+			        const newId = state.matches.length > 0 ? Math.max(...state.matches.map(m => m.id)) + 1 : 1;
+			        
+			        match = {
+			            id: newId,
+			            date: backupData.date || new Date().toISOString().split('T')[0],
+			            p1: backupData.player1,
+			            p2: backupData.player2,
+			            target1: backupData.target1 || backupData.p1Target || 50,
+			            target2: backupData.target2 || backupData.p2Target || 50,
+			            completed: backupData.completed || false,
+			            whitePlayer: backupData.whitePlayer || 1,
+			            p1Score: backupData.p1Score || 0,
+			            p2Score: backupData.p2Score || 0,
+			            p1Turns: backupData.p1Turns || [],
+			            p2Turns: backupData.p2Turns || []
+			        };
+			        
+			        state.matches.push(match);
+			    } else {
+			        // Update bestaande match
+			        match.p1Score = backupData.p1Score || 0;
+			        match.p2Score = backupData.p2Score || 0;
+			        match.p1Turns = backupData.p1Turns || [];
+			        match.p2Turns = backupData.p2Turns || [];
+			        match.completed = backupData.completed || false;
+			    }
+			    
+			    // Sla op in storage
+			    saveStateToStorage();
+			    
+			    // Stel in als currentMatch
+			    state.currentMatch = match;
+			    state.selectedWhitePlayer = match.whitePlayer;
+			    
+			    // Herstel speler states
+			    state.player1 = {
+			        score: match.p1Score,
+			        turns: [...match.p1Turns],
+			        target: match.target1,
+			        beurtNummer: match.p1Turns.length + 1,
+			        highestSeries: Math.max(...match.p1Turns, 0),
+			        isWhite: match.whitePlayer === 1,
+			        fixedTSG: '−'
+			    };
+			    
+			    state.player2 = {
+			        score: match.p2Score,
+			        turns: [...match.p2Turns],
+			        target: match.target2,
+			        beurtNummer: match.p2Turns.length + 1,
+			        highestSeries: Math.max(...match.p2Turns, 0),
+			        isWhite: match.whitePlayer === 2,
+			        fixedTSG: '−'
+			    };
+			    
+			    state.currentPlayer = backupData.currentPlayer || 1;
+			    state.turnNumber = backupData.turnNumber || Math.floor((state.player1.turns.length + state.player2.turns.length) / 2) + 1;
+			    state.isFirstPlayerInRound = backupData.isFirstPlayerInRound !== undefined ? backupData.isFirstPlayerInRound : true;
+			    state.firstToTarget = backupData.firstToTarget || null;
+			    state.isNabeurt = backupData.isNabeurt || false;
+			    state.matchEnded = backupData.completed || false;
+			    state.currentInput = 0;
+			    
+			    // Reset undo
+			    lastStateBeforeAdd = null;
+			    
+			    // Ga naar pagina 5
+			    showPage(5);
+			    
+			    // Update de UI
+			    document.getElementById('matchTitle').textContent = `${match.p1} ⚔️ ${match.p2}`;
+			    document.getElementById('player1ScoreName').textContent = match.p1;
+			    document.getElementById('player2ScoreName').textContent = match.p2;
+			    
+			    if (state.matchEnded) {
+			        disableScoreButtons();
+			        document.getElementById('matchEndedAlert').style.display = 'block';
+			    } else {
+			        enableScoreButtons();
+			        document.getElementById('matchEndedAlert').style.display = 'none';
+			    }
+			    
+			    updateSideScoreDisplays();
+			    updateScoringPage();
+			    
+			    alert(`✅ Match hersteld!\n${match.p1} ⚔️ ${match.p2}\nScore: ${match.p1Score} - ${match.p2Score}`);
+			}
+			
+			// Wijzig de backup functie om meer data op te slaan
+			function backupMatchSilently(matchData) {
+			    // Breid de backup uit met alle benodigde data
+			    const fullBackup = {
+			        matchData: matchData,
+			        timestamp: new Date().toISOString(),
+			        player1: state.currentMatch.p1,
+			        player2: state.currentMatch.p2,
+			        p1Score: state.player1.score,
+			        p2Score: state.player2.score,
+			        p1Turns: [...state.player1.turns],
+			        p2Turns: [...state.player2.turns],
+			        currentPlayer: state.currentPlayer,
+			        turnNumber: state.turnNumber,
+			        isFirstPlayerInRound: state.isFirstPlayerInRound,
+			        firstToTarget: state.firstToTarget,
+			        isNabeurt: state.isNabeurt,
+			        completed: state.matchEnded,
+			        whitePlayer: state.currentMatch.whitePlayer,
+			        matchId: state.currentMatch.id,
+			        date: state.currentMatch.date,
+			        target1: state.player1.target,
+			        target2: state.player2.target
+			    };
+			    
+			    // 1. Opslaan in LocalStorage
+			    localStorage.setItem('currentMatchBackup', JSON.stringify(fullBackup));
+			
+			    // 2. Backup naar Google Sheets (bestaande code)
+			    if (navigator.onLine) {
+			        const BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec';
+			        
+			        fetch(BACKUP_URL, {
+			            method: 'POST',
+			            mode: 'no-cors',
+			            headers: { 'Content-Type': 'application/json' },
+			            body: JSON.stringify(fullBackup)
+			        }).catch(() => {});
+			    }
+			}
+
             window.addScore = function() {
                 // Controleer of match is afgelopen
                 if (state.matchEnded) {

@@ -589,7 +589,11 @@ function generateExcelStylePlayerDetail(playerName) {
         
         const percGewonnen = (totaalGewonnen / aantalPartijen) * 100;
         const percVerloren = 100 - percGewonnen;
-        const matchpunten = gewonnen ? 2 : 1;
+        
+        // Nieuwe matchpunten berekening
+        const tsgValue = parseFloat(player.tsg?.replace(',', '.') || 0);
+        const scoreGehaald = punten >= tsgValue;
+        const matchpunten = gewonnen ? (scoreGehaald ? 4 : 2) : (scoreGehaald ? 3 : 1);
         
         resultRows.push({
             speeldag: Math.floor(index / 2) + 1,
@@ -613,7 +617,6 @@ function generateExcelStylePlayerDetail(playerName) {
     
     return createExcelTableHTML(playerName, player, resultRows);
 }
-
 function formatDateForKlassement(dateStr) {
     if (!dateStr) return '';
     try {

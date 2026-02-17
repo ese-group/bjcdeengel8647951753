@@ -432,7 +432,7 @@ function loadStatsPage() {
         let html = `
             <div class="stats-header">
                 <h2>📊 Speler Statistieken</h2>
-                <p>${players.length} spelers, ${matches.length} voltooide matches</p>
+                <p style="color: #ffffff;">${players.length} spelers, ${matches.length} voltooide matches</p>
             </div>
             <div class="players-stats-grid">
         `;

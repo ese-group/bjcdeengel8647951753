@@ -3085,28 +3085,23 @@ window.showPage = function(pageNum) {
                 state.players.sort((a, b) => a.name.localeCompare(b.name));
                 
                 let html = '<h3 style="margin-bottom: 15px; color: #ecf0f1;">Beschikbare spelers:</h3>';
-				html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">';
-				
-				state.players.forEach((player, index) => {
-				    const isSelected = (state.newMatch.player1 && state.newMatch.player1.name === player.name) ||
-				                     (state.newMatch.player2 && state.newMatch.player2.name === player.name);
-				    
-				    // Bepaal stijl op basis van geselecteerd of niet
-				    const boxStyle = isSelected 
-				        ? 'background-color: #5d6d7e; color: #fff; border: 2px solid #e74c3c; cursor: not-allowed; opacity: 0.8;' 
-				        : 'background-color: #ffffff; color: #000000; border: 1px solid #bdc3c7; cursor: pointer;';
-				    
-				    html += `
-				        <div class="player-select-box ${isSelected ? 'selected' : ''}" 
-				             onclick="selectAvailablePlayer(${index})"
-				             style="${boxStyle} padding: 12px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s;">
-				            <h3 style="margin: 0 0 8px 0; font-size: 18px; ${isSelected ? 'color: #fff;' : 'color: #2c3e50;'}">${player.name}</h3>
-				            <p style="margin: 4px 0; font-size: 14px; ${isSelected ? 'color: #ecf0f1;' : 'color: #34495e;'}">Gemiddelde: ${player.tsg || 'N/A'}</p>
-				            <p style="margin: 4px 0; font-size: 14px; ${isSelected ? 'color: #ecf0f1;' : 'color: #34495e;'}">Standaard target: ${player.target}</p>
-				            ${isSelected ? '<p style="color: #f1c40f; margin-top: 8px; font-weight: bold;">✓ Al geselecteerd</p>' : ''}
-				        </div>
-				    `;
-				});
+                html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">';
+                
+                state.players.forEach((player, index) => {
+                    const isSelected = (state.newMatch.player1 && state.newMatch.player1.name === player.name) ||
+                                     (state.newMatch.player2 && state.newMatch.player2.name === player.name);
+                    
+                    html += `
+                        <div class="player-select-box ${isSelected ? 'selected' : ''}" 
+                             onclick="selectAvailablePlayer(${index})"
+                             style="${isSelected ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+                            <h3>${player.name}</h3>
+                            <p>Gemiddelde: ${player.tsg || 'N/A'}</p>
+                            <p>Standaard target: ${player.target}</p>
+                            ${isSelected ? '<p style="color: #e74c3c; margin-top: 5px;">✓ Al geselecteerd</p>' : ''}
+                        </div>
+                    `;
+                });
 
             window.selectAvailablePlayer = function(playerIndex) {
                 if (playerIndex < 0 || playerIndex >= state.players.length) return;

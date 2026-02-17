@@ -700,7 +700,23 @@
             background: white;
             color: black;
         }
-        
+
+		/* Geselecteerde witte bal blijft wit */
+		.ball-circle.white.selected {
+		    background: white;
+		}
+		
+		/* Niet geselecteerde witte bal wordt geel */
+		.ball-circle.white:not(.selected) {
+		    background: #f1c40f;
+		    color: black;
+		}
+
+
+
+
+
+		
         .ball-circle.yellow {
             background: #f1c40f;
             color: black;
@@ -712,9 +728,7 @@
             transform: scale(1.1);
         }
 		
-		.ball-circle:not(.selected) {
-		    background-color: yellow;
-		}
+
         
         .ball-option-label {
             font-size: 1em;

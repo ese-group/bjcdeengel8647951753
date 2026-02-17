@@ -790,6 +790,33 @@ function showSpelerDetail(spelerNaam) {
     
     const excelTable = generateExcelStylePlayerDetail(spelerNaam);
     
+    // Bouw ref-values alleen voor ingevelde velden
+    const refItems = [
+        { label: 'TSG:', value: player.tsg },
+        { label: 'Target:', value: player.target },
+        { label: 'TSG eerste 6:', value: player.tsgEersteZes },
+        { label: 'Target eerste 6:', value: player.targetEersteZes }
+    ].filter(item => {
+        // Toon alleen als waarde bestaat, niet leeg is en niet gelijk aan 'N/A'
+        return item.value && 
+               item.value !== 'N/A' && 
+               item.value !== '' && 
+               item.value !== null && 
+               item.value !== undefined;
+    });
+    
+    // Genereer HTML voor de ref-values als er minstens één item is
+    const refValuesHtml = refItems.length > 0 
+        ? `<div class="ref-values">
+            ${refItems.map(item => `
+                <div class="ref-item">
+                    <span class="ref-label">${item.label}</span>
+                    <span class="ref-value">${item.value}</span>
+                </div>
+            `).join('')}
+           </div>`
+        : ''; // Geen ref-values als alles leeg is
+    
     document.getElementById('statsContent').innerHTML = `
         <style>
             .detail-header {
@@ -836,24 +863,7 @@ function showSpelerDetail(spelerNaam) {
             <div class="detail-header">
                 <button class="back-btn" onclick="loadStatsPage()">← Terug naar overzicht</button>
                 <h2>${spelerNaam} - Excel Stijl Overzicht</h2>
-                <div class="ref-values">
-                    <div class="ref-item">
-                        <span class="ref-label">TSG:</span>
-                        <span class="ref-value">${player.tsg || 'N/A'}</span>
-                    </div>
-                    <div class="ref-item">
-                        <span class="ref-label">Target:</span>
-                        <span class="ref-value">${player.target || 'N/A'}</span>
-                    </div>
-                    <div class="ref-item">
-                        <span class="ref-label">TSG eerste 6:</span>
-                        <span class="ref-value">${player.tsgEersteZes || 'N/A'}</span>
-                    </div>
-                    <div class="ref-item">
-                        <span class="ref-label">Target eerste 6:</span>
-                        <span class="ref-value">${player.targetEersteZes || 'N/A'}</span>
-                    </div>
-                </div>
+                ${refValuesHtml}
             </div>
             ${excelTable}
         </div>

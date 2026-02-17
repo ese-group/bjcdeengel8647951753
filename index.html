@@ -2407,6 +2407,15 @@
         .tab-btn.speeldagen:hover {
             background: #d35400;
         }
+		.new-match-btn, .download-btn {
+		    height: 44px;               /* Vaste hoogte */
+		    padding: 0 25px;            /* Alleen horizontale padding */
+		    display: inline-flex;       /* Maakt verticaal centreren mogelijk */
+		    align-items: center;        /* Centreer tekst verticaal */
+		    justify-content: center;    /* Centreer tekst horizontaal */
+		    box-sizing: border-box;     /* Zorgt dat padding binnen de hoogte valt */
+		    line-height: 1;             /* Voorkomt extra ruimte */
+		}
     </style>
 </head>
 <body id="bodyElement">
@@ -2737,7 +2746,7 @@
 	<!-- BACKUP RECOVERY POPUP -->
 	<div id="backupRecoveryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;">
 	    <div style="background: #34495e; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
-	        <h2 style="color: #9b59b6; margin-bottom: 20px;">🔄 Herstel Backup Match</h2>
+	        <h2 style="color: #9b59b6; margin-bottom: 20px;"> 💾➜♻️ Herstel Onderbroken Match</h2>
 	        
 	        <div style="margin-bottom: 20px;">
 	            <label style="color: #ecf0f1; display: block; margin-bottom: 10px;">Backup bron:</label>

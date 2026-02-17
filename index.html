@@ -3291,22 +3291,31 @@ window.showPage = function(pageNum) {
 
             // ==================== BAL KLEUR SELECTIE ====================
             function updateBallSelectionPage() {
-                if (!state.currentMatch) return;
-                
-                document.getElementById('whiteBall1Text').textContent = state.currentMatch.p1;
-                document.getElementById('whiteBall2Text').textContent = state.currentMatch.p2;
-                document.getElementById('whiteBall1Label').textContent = state.currentMatch.p1;
-                document.getElementById('whiteBall2Label').textContent = state.currentMatch.p2;
-                
-                document.querySelectorAll('.ball-circle').forEach(ball => {
-                    ball.classList.remove('selected');
-                });
-                
-                const startBtn = document.getElementById('startMatchBtn');
-                startBtn.disabled = state.selectedWhitePlayer === null;
-                startBtn.className = state.selectedWhitePlayer === null ? 
-                    'start-match-btn disabled-btn' : 'start-match-btn';
-            }
+			    if (!state.currentMatch) return;
+			    
+			    document.getElementById('whiteBall1Text').textContent = state.currentMatch.p1;
+			    document.getElementById('whiteBall2Text').textContent = state.currentMatch.p2;
+			    document.getElementById('whiteBall1Label').textContent = state.currentMatch.p1;
+			    document.getElementById('whiteBall2Label').textContent = state.currentMatch.p2;
+			    
+			    const ball1 = document.getElementById('whiteBall1');
+			    const ball2 = document.getElementById('whiteBall2');
+			    
+			    // Verwijder alle tijdelijke klassen (selected, yellow)
+			    ball1.classList.remove('selected', 'yellow');
+			    ball2.classList.remove('selected', 'yellow');
+			    
+			    // Zorg dat beide wit zijn (de 'white' klasse blijft behouden)
+			    // (aanname: in HTML hebben ze al class 'white')
+			    
+			    // Startknop uitschakelen
+			    const startBtn = document.getElementById('startMatchBtn');
+			    startBtn.disabled = true;
+			    startBtn.className = 'start-match-btn disabled-btn';
+			    
+			    // Reset state.selectedWhitePlayer naar null
+			    state.selectedWhitePlayer = null;
+			}
 
             window.selectWhitePlayer = function(player) {
 			    state.selectedWhitePlayer = player;

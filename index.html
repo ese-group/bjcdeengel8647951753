@@ -908,12 +908,7 @@
             color: #bdc3c7;
         }
 
-		.player-select-box.active {
-		    outline: 3px solid #ffd54f;
-		    box-shadow: 0 0 12px rgba(255, 213, 79, 0.6);
-		}
-
-        
+		       
         .target-input {
             width: 100%;
             padding: 10px;
@@ -3125,7 +3120,7 @@ window.showPage = function(pageNum) {
 			                <h3>${player.name}</h3>
 			                <p>Gemiddelde: ${player.tsg || 'N/A'}</p>
 			                <p>Standaard target: ${player.target}</p>
-			                ${isSelected ? '<p style="color: #e74c3c; margin-top: 5px;">✓ Al geselecteerd</p>' : ''}
+			                ${isSelected ? '<p style="color: #2ecc71; margin-top: 6px;">✓ Al geselecteerd</p>' : ''}
 			            </div>
 			        `;
 			    }); // <-- sluit de forEach

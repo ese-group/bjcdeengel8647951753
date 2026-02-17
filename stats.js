@@ -663,7 +663,7 @@ function createExcelTableHTML(playerName, player, rows) {
     let html = `
         <div class="excel-table-container">
             <div class="table-header">
-                <h3>${playerName} - Excel Stijl Overzicht</h3>
+                <h3>${playerName} - Overzicht</h3>
                 <button class="small-btn" onclick="exportPlayerExcel('${playerName}')">📥 Exporteer</button>
             </div>
             
@@ -882,7 +882,7 @@ function showSpelerDetail(spelerNaam) {
         <div class="excel-detail-view">
             <div class="detail-header">
                 <button class="back-btn" onclick="loadStatsPage()">← Terug naar overzicht</button>
-                <h2>${spelerNaam} - Excel Stijl Overzicht</h2>
+                <h2>${spelerNaam} - Overzicht</h2>
                 ${refValuesHtml}
             </div>
             ${excelTable}

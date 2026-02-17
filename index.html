@@ -3040,7 +3040,7 @@ window.showPage = function(pageNum) {
                 
                 matchList.innerHTML = filteredMatches.map(match => `
                     <div class="match-card" onclick="selectMatch(${match.id})">
-                        <h3>${match.p1} vs ${match.p2}</h3>
+                        <h3>${match.p1} ⚔️ ${match.p2}</h3>
                         <p class="match-info">
                             ⚪🟡🔴 Punten: ${match.target1} - ${match.target2}<br>
                             📅 Datum: ${formatDateDisplay(match.date)}

@@ -1532,6 +1532,37 @@
             }
         }
 
+
+		#page5 .header {
+		    display: flex;
+		    align-items: center;
+		    min-height: 60px; /* vaste hoogte voor consistentie */
+		}
+		
+		#page5 .header h1 {
+		    flex: 1; /* neemt alle beschikbare ruimte in */
+		    text-align: center;
+		    margin: 0;
+		}
+		
+		#page5 .header #matchHeaderButtons {
+		    width: 120px; /* vaste breedte voor de knoppen */
+		}
+		
+		/* Als de knoppen verborgen zijn */
+		#page5 .header #matchHeaderButtons[style*="display: none"] {
+		    display: none;
+		}
+		
+		/* Als knoppen verborgen zijn, blijft h1 gecentreerd */
+		#page5 .header #matchHeaderButtons[style*="display: none"] + h1 {
+		    flex: 1;
+		    text-align: center;
+		}
+
+
+
+		
         /* ==================== EXCEL SPECIFIEKE STIJLEN ==================== */
         /* Excel Card Styling */
         .excel-stats-card {

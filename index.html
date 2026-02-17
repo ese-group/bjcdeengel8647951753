@@ -3059,7 +3059,7 @@ window.showPage = function(pageNum) {
                 state.currentMatch = match;
                 state.selectedWhitePlayer = null;
                 
-                document.getElementById('matchTitleSelect').textContent = `${match.p1} vs ${match.p2}`;
+                document.getElementById('matchTitleSelect').textContent = `${match.p1} ⚔️ ${match.p2}`;
                 
                 showPage(4);
             }
@@ -3387,7 +3387,7 @@ window.showPage = function(pageNum) {
 			    document.getElementById('matchEndedAlert').style.display = 'none';
 			    
 			    // Update titel
-			    document.getElementById('matchTitle').textContent = `${state.currentMatch.p1} vs ${state.currentMatch.p2}`;
+			    document.getElementById('matchTitle').textContent = `${state.currentMatch.p1} ⚔️ ${state.currentMatch.p2}`;
 			    
 			    // Zet namen in de score displays
 			    document.getElementById('player1ScoreName').textContent = state.currentMatch.p1;

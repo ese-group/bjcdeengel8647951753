@@ -3309,24 +3309,29 @@ window.showPage = function(pageNum) {
             }
 
             window.selectWhitePlayer = function(player) {
-                state.selectedWhitePlayer = player;
-                
-                document.querySelectorAll('.ball-circle').forEach(ball => {
-                    ball.classList.remove('selected');
-                });
-                
-                const selectedBall = player === 1 ? 
-                    document.getElementById('whiteBall1') : 
-                    document.getElementById('whiteBall2');
-                
-                if (selectedBall) {
-                    selectedBall.classList.add('selected');
-                }
-                
-                const startBtn = document.getElementById('startMatchBtn');
-                startBtn.disabled = false;
-                startBtn.className = 'start-match-btn';
-            }
+			    state.selectedWhitePlayer = player;
+			    
+			    const ball1 = document.getElementById('whiteBall1');
+			    const ball2 = document.getElementById('whiteBall2');
+			    
+			    // Verwijder alle tijdelijke klassen (selected en yellow)
+			    ball1.classList.remove('selected', 'yellow');
+			    ball2.classList.remove('selected', 'yellow');
+			    
+			    // Zet de geselecteerde speler op wit + geselecteerd, de ander op geel
+			    if (player === 1) {
+			        ball1.classList.add('selected'); // blijft wit (class white staat al in HTML)
+			        ball2.classList.add('yellow');
+			    } else {
+			        ball1.classList.add('yellow');
+			        ball2.classList.add('selected');
+			    }
+			    
+			    // Startknop inschakelen
+			    const startBtn = document.getElementById('startMatchBtn');
+			    startBtn.disabled = false;
+			    startBtn.className = 'start-match-btn';
+			}
 
             window.startMatch = function() {
 			    if (!state.selectedWhitePlayer) {

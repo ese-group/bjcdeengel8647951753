@@ -3803,6 +3803,7 @@ window.showPage = function(pageNum) {
 			}
 			
 			// Herstel match van backup data
+			// Herstel match van backup data
 			function restoreMatchFromBackup(backupData) {
 			    // Zoek of maak de match in state.matches
 			    let match = state.matches.find(m => m.id === backupData.matchId);
@@ -3816,10 +3817,10 @@ window.showPage = function(pageNum) {
 			            date: backupData.date || new Date().toISOString().split('T')[0],
 			            p1: backupData.player1,
 			            p2: backupData.player2,
-			            target1: backupData.target1 || backupData.p1Target || 50,
-			            target2: backupData.target2 || backupData.p2Target || 50,
+			            target1: backupData.target1 || 50,
+			            target2: backupData.target2 || 50,
 			            completed: backupData.completed || false,
-			            whitePlayer: backupData.whitePlayer || 1,
+			            whitePlayer: backupData.whitePlayer || 1,  // Bewaar voor CSV
 			            p1Score: backupData.p1Score || 0,
 			            p2Score: backupData.p2Score || 0,
 			            p1Turns: backupData.p1Turns || [],
@@ -3834,6 +3835,7 @@ window.showPage = function(pageNum) {
 			        match.p1Turns = backupData.p1Turns || [];
 			        match.p2Turns = backupData.p2Turns || [];
 			        match.completed = backupData.completed || false;
+			        // Houd de originele whitePlayer, maar overschrijf niet
 			    }
 			    
 			    // Sla op in storage
@@ -3841,7 +3843,7 @@ window.showPage = function(pageNum) {
 			    
 			    // Stel in als currentMatch
 			    state.currentMatch = match;
-			    state.selectedWhitePlayer = match.whitePlayer;
+			    state.selectedWhitePlayer = match.whitePlayer; // Alleen voor de weergave, niet voor isWhite
 			    
 			    // Herstel speler states
 			    state.player1 = {
@@ -3850,7 +3852,7 @@ window.showPage = function(pageNum) {
 			        target: match.target1,
 			        beurtNummer: match.p1Turns.length + 1,
 			        highestSeries: Math.max(...match.p1Turns, 0),
-			        isWhite: match.whitePlayer === 1,
+			        isWhite: true,  // 🔥 FORCEER: speler 1 is altijd wit in de UI
 			        fixedTSG: '−'
 			    };
 			    
@@ -3860,7 +3862,7 @@ window.showPage = function(pageNum) {
 			        target: match.target2,
 			        beurtNummer: match.p2Turns.length + 1,
 			        highestSeries: Math.max(...match.p2Turns, 0),
-			        isWhite: match.whitePlayer === 2,
+			        isWhite: false, // 🔥 speler 2 is altijd geel
 			        fixedTSG: '−'
 			    };
 			    
@@ -3896,7 +3898,6 @@ window.showPage = function(pageNum) {
 			    
 			    alert(`✅ Match hersteld!\n${match.p1} ⚔️ ${match.p2}\nScore: ${match.p1Score} - ${match.p2Score}`);
 			}
-			
 			// Wijzig de backup functie om meer data op te slaan
 			function backupMatchSilently(matchData) {
 			    // Breid de backup uit met alle benodigde data

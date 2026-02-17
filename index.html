@@ -701,32 +701,38 @@
             color: black;
         }
 
-		/* Geselecteerde witte bal blijft wit */
-		.ball-circle.white.selected {
-		    background: white;
-		}
-		
-		/* Niet geselecteerde witte bal wordt geel */
-		.ball-circle.white:not(.selected) {
-		    background: #f1c40f;
-		    color: black;
-		}
-
-
-
-
-
-		
-        .ball-circle.yellow {
+		.ball-circle.yellow {
             background: #f1c40f;
             color: black;
         }
-        
-        .ball-circle.selected {
+
+		.ball-circle.selected {
             border-color: #e74c3c;
             box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
             transform: scale(1.1);
         }
+
+		.ball-circle.white:not(.selected) {
+
+		    background:
+		        radial-gradient(circle at 30% 30%,
+		        #fff3a0 0%,
+		        #f1c40f 40%,
+		        #c39d0a 100%);
+		
+		    color: black;
+		}
+
+		
+
+
+
+
+
+		
+        
+        
+        
 		
 
         

@@ -3948,6 +3948,46 @@ window.showPage = function(pageNum) {
 			    }
 			}
 
+			// Stuur een voltooide match naar het Google Sheets Archief
+			function archiveCompletedMatch(match) {
+			  // Controleer of we online zijn
+			  if (!navigator.onLine) {
+			    console.log('Offline: archivering overgeslagen');
+			    return;
+			  }
+			
+			  // Bouw het data-object voor archivering
+			  const archiveData = {
+			    matchId: match.id,
+			    date: match.date,
+			    player1: match.p1,
+			    player2: match.p2,
+			    target1: match.target1,
+			    target2: match.target2,
+			    score1: match.p1Score || 0,
+			    score2: match.p2Score || 0,
+			    winnaar: match.winner || '',
+			    whitePlayer: match.whitePlayer || 1,
+			    beurten1Count: match.p1Turns ? match.p1Turns.length : 0,
+			    beurten2Count: match.p2Turns ? match.p2Turns.length : 0,
+			    highest1: match.p1Highest || 0,
+			    highest2: match.p2Highest || 0,
+			    // Optioneel: stuur de volledige matchdata mee voor later herstel
+			    fullMatchData: JSON.stringify(match)
+			  };
+			
+			  const ARCHIVE_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec?action=archive';
+			
+			  fetch(ARCHIVE_URL, {
+			    method: 'POST',
+			    mode: 'no-cors', // om CORS-problemen te voorkomen
+			    headers: { 'Content-Type': 'application/json' },
+			    body: JSON.stringify(archiveData)
+			  })
+			  .then(() => console.log('Match gearchiveerd:', match.id))
+			  .catch(error => console.error('Archiveren mislukt:', error));
+			}
+
             window.addScore = function() {
                 // Controleer of match is afgelopen
                 if (state.matchEnded) {

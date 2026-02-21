@@ -6329,56 +6329,68 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
             }
 
             function downloadMatchesAsCSV(matches, filename) {
-                let csvContent = "\uFEFF"; // UTF-8 BOM
-                
-                csvContent += "Datum;Match ID;Speler 1;Speler 2;Doel 1;Doel 2;Score 1;Score 2;Winnende Speler;Wit Speler;Hoogste Reeks 1;Hoogste Reeks 2;Gemiddelde 1;Gemiddelde 2;Beurten 1;Beurten 2;Regel\n";
-
-                matches.forEach(match => {
-                    const p1 = match.originalP1 || match.p1;
-                    const p2 = match.originalP2 || match.p2;
-                    const target1 = match.originalTarget1 || match.target1;
-                    const target2 = match.originalTarget2 || match.target2;
-                    const p1Score = match.p1Score || 0;
-                    const p2Score = match.p2Score || 0;
-                    
-                    const p1TurnsCount = match.p1Turns ? match.p1Turns.length : 0;
-                    const p2TurnsCount = match.p2Turns ? match.p2Turns.length : 0;
-                    
-                    const avg1 = p1TurnsCount > 0 ? 
-                        (p1Score / p1TurnsCount).toFixed(2).replace('.', ',') : "0,00";
-                    const avg2 = p2TurnsCount > 0 ? 
-                        (p2Score / p2TurnsCount).toFixed(2).replace('.', ',') : "0,00";
-                    
-                    const witSpeler = match.whitePlayer === 1 ? 
-                        (match.originalP1 || match.p1) : 
-                        (match.originalP2 || match.p2);
-                    
-                    const winnaar = match.winner || (p1Score >= target1 ? p1 : p2);
-                    
-                    // Bepaal welke regel er werd toegepast
-                    let regel = "Normaal";
-                    if (match.winner === p1) {
-                        regel = "Speler 1 won (eerste target) - nabeurt Speler 2";
-                    } else if (match.winner === p2) {
-                        regel = "Speler 2 won (eerste target) - geen nabeurt";
-                    }
-                    
-                    csvContent += `${formatDateForCSV(match.date)};${match.id};${p1};${p2};${target1};${target2};`;
-                    csvContent += `${p1Score};${p2Score};`;
-                    csvContent += `${winnaar};${witSpeler};`;
-                    csvContent += `${match.p1Highest || 0};${match.p2Highest || 0};${avg1};${avg2};`;
-                    csvContent += `${p1TurnsCount};${p2TurnsCount};${regel}\n`;
-                });
-            
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", `biljart_${filename}_${new Date().toISOString().split('T')[0]}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
+			    let csvContent = "\uFEFF"; // UTF-8 BOM
+			    
+			    csvContent += "Datum;Match ID;Speler 1;Speler 2;Doel 1;Doel 2;Score 1;Score 2;Winnende Speler;Wit Speler;Hoogste Reeks 1;Hoogste Reeks 2;Gemiddelde 1;Gemiddelde 2;Beurten 1;Beurten 2;Regel\n";
+			
+			    matches.forEach(match => {
+			        const p1 = match.originalP1 || match.p1;
+			        const p2 = match.originalP2 || match.p2;
+			        const target1 = match.originalTarget1 || match.target1;
+			        const target2 = match.originalTarget2 || match.target2;
+			        
+			        // Bepaal welke scores bij welke originele speler horen
+			        let score1, score2, turns1, turns2, highest1, highest2, avg1, avg2;
+			        
+			        if (match.whitePlayer === 1) {
+			            // Geen wisseling: p1Score hoort bij originele speler 1
+			            score1 = match.p1Score || 0;
+			            score2 = match.p2Score || 0;
+			            turns1 = match.p1Turns ? match.p1Turns.length : 0;
+			            turns2 = match.p2Turns ? match.p2Turns.length : 0;
+			            highest1 = match.p1Highest || 0;
+			            highest2 = match.p2Highest || 0;
+			        } else {
+			            // Wisseling: p1Score (wit) hoort bij originele speler 2
+			            score1 = match.p2Score || 0; // gele speler (originele speler 1)
+			            score2 = match.p1Score || 0; // witte speler (originele speler 2)
+			            turns1 = match.p2Turns ? match.p2Turns.length : 0;
+			            turns2 = match.p1Turns ? match.p1Turns.length : 0;
+			            highest1 = match.p2Highest || 0;
+			            highest2 = match.p1Highest || 0;
+			        }
+			        
+			        // Gemiddelden berekenen (met komma als decimaal)
+			        avg1 = turns1 > 0 ? (score1 / turns1).toFixed(2).replace('.', ',') : "0,00";
+			        avg2 = turns2 > 0 ? (score2 / turns2).toFixed(2).replace('.', ',') : "0,00";
+			        
+			        const witSpeler = match.whitePlayer === 1 ? p1 : p2;
+			        const winnaar = match.winner || (score1 >= target1 ? p1 : p2);
+			        
+			        // Bepaal welke regel er werd toegepast
+			        let regel = "Normaal";
+			        if (match.winner === p1) {
+			            regel = "Speler 1 won (eerste target) - nabeurt Speler 2";
+			        } else if (match.winner === p2) {
+			            regel = "Speler 2 won (eerste target) - geen nabeurt";
+			        }
+			        
+			        csvContent += `${formatDateForCSV(match.date)};${match.id};${p1};${p2};${target1};${target2};`;
+			        csvContent += `${score1};${score2};`;
+			        csvContent += `${winnaar};${witSpeler};`;
+			        csvContent += `${highest1};${highest2};${avg1};${avg2};`;
+			        csvContent += `${turns1};${turns2};${regel}\n`;
+			    });
+			
+			    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+			    const link = document.createElement("a");
+			    const url = URL.createObjectURL(blob);
+			    link.setAttribute("href", url);
+			    link.setAttribute("download", `biljart_${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+			    document.body.appendChild(link);
+			    link.click();
+			    document.body.removeChild(link);
+			}
 
             // ==================== STATE MANAGEMENT ====================
             function saveStateToStorage() {

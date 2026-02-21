@@ -4157,6 +4157,9 @@ window.showPage = function(pageNum) {
                 state.currentMatch.winner = winner;
                 
                 saveStateToStorage();
+
+				// Aan het einde van endMatch, bijvoorbeeld na saveStateToStorage():
+				archiveCompletedMatch(state.currentMatch);
                 
                 const matchEndedAlert = document.getElementById('matchEndedAlert');
                 if (matchEndedAlert) {

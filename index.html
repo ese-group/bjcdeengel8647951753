@@ -3670,28 +3670,7 @@ window.showPage = function(pageNum) {
                 }
             }
 
-            // ===== STILLE BACKUP FUNCTIE =====
-            function backupMatchSilently(matchData) {
-                // 1. Opslaan in LocalStorage (werkt altijd, zelfs offline)
-                localStorage.setItem('currentMatchBackup', JSON.stringify({
-                    matchData: matchData,
-                    timestamp: new Date().toISOString()
-                }));
 
-                // 2. Asynchrone backup naar Google Sheets (alleen als internet beschikbaar is)
-                if (navigator.onLine) {
-                    const BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec';
-
-                    fetch(BACKUP_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', // Zorgt dat het niet blokkeert
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(matchData)
-                    }).catch(() => {
-                        // Fout negeren – lokale backup is al veilig
-                    });
-                }
-            }
 
 
 			// Toon backup herstel modal

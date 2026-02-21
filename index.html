@@ -5705,6 +5705,64 @@ function parseSpeeldagenCSVMetKopteksten(csvText) {
                 }
             }
 
+			function loadArchiveTab() {
+			    const container = document.getElementById('tabContentArchive');
+			    container.innerHTML = '<div style="text-align:center; padding:20px;">🔄 Archief laden...</div>';
+			
+			    // Haal archief op van Google Sheets
+			    fetchArchiveFromSheet()
+			        .then(matches => {
+			            displayArchiveMatches(matches);
+			            updateArchiveBadge(matches.length);
+			        })
+			        .catch(error => {
+			            container.innerHTML = `<div class="error-message">❌ Fout bij laden archief: ${error.message}</div>`;
+			        });
+			}
+			
+			// Haal archief op via GET-request
+			async function fetchArchiveFromSheet() {
+			    const ARCHIVE_GET_URL = 'https://script.google.com/macros/s/AKfycbwpghGcQjnwXCxFe1EHjRjZ0p4KuG06YpcmcUpuO4AmS5K2E9cmkzewsi6ROZXaiIqA/exec?action=getArchive';
+			    
+			    const response = await fetch(ARCHIVE_GET_URL);
+			    if (!response.ok) throw new Error('Netwerkfout');
+			    const data = await response.json();
+			    if (!data.success) throw new Error(data.error || 'Onbekende fout');
+			    return data.matches || [];
+			}
+			
+			// Toon de lijst met gearchiveerde matches
+			function displayArchiveMatches(matches) {
+			    const container = document.getElementById('tabContentArchive');
+			    if (!matches.length) {
+			        container.innerHTML = '<div class="no-matches">📭 Geen gearchiveerde matches</div>';
+			        return;
+			    }
+			
+			    let html = '<div class="matches-list-title">Gearchiveerde matches</div>';
+			    matches.forEach(match => {
+			        html += `
+			            <div class="match-card completed" style="cursor: default;">
+			                <h3>${match.player1} ⚔️ ${match.player2}</h3>
+			                <p class="match-info">
+			                    🎯 Punten: ${match.target1} - ${match.target2}<br>
+			                    📊 Eindscore: ${match.score1} - ${match.score2}<br>
+			                    🏆 Winnaar: ${match.winnaar}<br>
+			                    📅 Datum: ${formatDateDisplay(match.date)}<br>
+			                    🗓️ Gearchiveerd: ${new Date(match.timestamp).toLocaleString()}
+			                </p>
+			                <!-- Eventueel een knop om te herstellen -->
+			            </div>
+			        `;
+			    });
+			    container.innerHTML = html;
+			}
+			
+			// Update het badge-aantal op het tabblad
+			function updateArchiveBadge(count) {
+			    const badge = document.getElementById('badgeArchive');
+			    if (badge) badge.textContent = count;
+			}
             function renderSpeeldagenList() {
                 const container = document.getElementById('speeldagenListContent');
                 if (!container) return;

@@ -2776,6 +2776,43 @@
 	        <!-- Wordt gevuld door stats.js -->
 	    </div>
 	</div>
+	// ==================== PRESENTER CONTROLS ====================
+	function initPresenterControls() {
+	                document.addEventListener('keydown', function(event) {
+	                    // Alleen reageren als we op de scorepagina (page5) zijn
+	                    const activePage = document.querySelector('.page.active');
+	                    if (!activePage || activePage.id !== 'page5') return;
+	
+	                    // Alleen als er een actieve match is en niet beëindigd
+	                    if (!state.currentMatch || state.matchEnded) return;
+	
+	                    // Niet reageren in invoervelden
+	                    const targetTag = event.target.tagName;
+	                    if (targetTag === 'INPUT' || targetTag === 'TEXTAREA') return;
+	
+	                    const key = event.key;
+	                    switch (key) {
+	                        case 'ArrowRight':
+	                            event.preventDefault();
+	                            if (typeof window.changeScore === 'function') window.changeScore(1);
+	                            break;
+	                        case 'ArrowLeft':
+	                            event.preventDefault();
+	                            if (typeof window.changeScore === 'function') window.changeScore(-1);
+	                            break;
+	                        case 'Enter':
+	                        case ' ':
+	                            event.preventDefault();
+	                            if (typeof window.addScore === 'function') window.addScore();
+	                            break;
+	                        default:
+	                            break;
+	                    }
+	                });
+	                console.log('✅ Presenter controls geactiveerd (pijltjes, Enter/Spatie)');
+	            }
+            
+	
 	<!-- BACKUP RECOVERY POPUP -->
 	<div id="backupRecoveryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;">
 	    <div style="background: #34495e; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
